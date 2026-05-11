@@ -153,13 +153,13 @@ Deve mostrar `nort-dashboard-app` e `nort-dashboard-db` como `running` / `health
 ### 3.5 Aplicar a estrutura do banco (🌐 VPS)
 
 ```bash
-docker compose exec app npx prisma db push
+docker compose exec app npx prisma@5.22.0 db push
 ```
 
 ### 3.6 Criar os usuários iniciais (🌐 VPS)
 
 ```bash
-docker compose exec app npx tsx scripts/seed.ts
+docker compose exec app node scripts/seed.js
 ```
 
 Deve aparecer:
@@ -226,10 +226,10 @@ docker compose down
 
 ### Adicionar / trocar senha de um usuário (🌐 VPS)
 
-Edite `scripts/seed.ts` no PC, suba pro Git, e rode de novo na VPS:
+Edite `scripts/seed.js` no PC, suba pro Git, e rode de novo na VPS:
 
 ```bash
-docker compose exec app npx tsx scripts/seed.ts
+docker compose exec app node scripts/seed.js
 ```
 
 O seed atualiza senhas existentes.
