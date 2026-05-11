@@ -135,51 +135,58 @@ export const SIZES_MAP: Record<string, string> = {
   '29x21': '29 × 21 cm',
 };
 
-// ========= IMAGENS DE MOCKUP =========
+// ========= IMAGENS DE MOCKUP (caminhos locais em /public) =========
 export const MOCK_BASE_BY_COLOR: Record<string, string> = {
-  'preto':        'https://www.nortsports.com.br/wp-content/uploads/2025/11/teste-preto.png',
-  'azul-marinho': 'https://www.nortsports.com.br/wp-content/uploads/2025/11/azul-marinho.png',
-  'cinza-chumbo': 'https://www.nortsports.com.br/wp-content/uploads/2025/11/cinza.png',
-  'branco':       'https://www.nortsports.com.br/wp-content/uploads/2025/11/branco.png',
-  'azul-royal':   'https://www.nortsports.com.br/wp-content/uploads/2025/11/azul-royal.png',
-  'indigo-blue':  'https://www.meridianpro.com.br/wp-content/uploads/2026/01/brim2.png',
-  'especial':     'https://www.meridianpro.com.br/wp-content/uploads/2026/01/cor-especial2.png',
+  'preto':        '/calculadora/base/preto.png',
+  'azul-marinho': '/calculadora/base/azul-marinho.png',
+  'cinza-chumbo': '/calculadora/base/cinza-chumbo.png',
+  'branco':       '/calculadora/base/branco.png',
+  'azul-royal':   '/calculadora/base/azul-royal.png',
+  'indigo-blue':  '/calculadora/base/calca-jeans.png',
+  'especial':     '/calculadora/base/cor-especial.png',
 };
 
-export const MOCK_BASE_CALCA_BRIM = 'https://www.meridianpro.com.br/wp-content/uploads/2026/01/brim2.png';
-export const MOCK_BASE_CALCA_JEANS = 'https://www.meridianpro.com.br/wp-content/uploads/2026/01/jeans.png';
-
-const BASE_2X10: Record<string, string> = {
-  'frente:esquerdo:2x10': 'https://www.nortsports.com.br/wp-content/uploads/2025/11/peito-esq2x6.png',
-  'frente:centro:2x10':   'https://www.nortsports.com.br/wp-content/uploads/2025/11/peito-cen2x6.png',
-  'frente:direito:2x10':  'https://www.nortsports.com.br/wp-content/uploads/2025/11/peito-dir2x6.png',
-  'frente:inferior:2x10': 'https://www.nortsports.com.br/wp-content/uploads/2025/11/peito-inf2x6.png',
-  'costas:topo:2x10':   'https://www.nortsports.com.br/wp-content/uploads/2025/11/costas-sup2x6.png',
-  'costas:centro:2x10': 'https://www.nortsports.com.br/wp-content/uploads/2025/11/costas-cen2x6.png',
-  'costas:barra:2x10':  'https://www.nortsports.com.br/wp-content/uploads/2025/11/costas-inf2x6.png',
-  'manga-esquerda:padrao:2x10': 'https://www.nortsports.com.br/wp-content/uploads/2025/11/manga-esq2x6.png',
-  'manga-direita:padrao:2x10':  'https://www.nortsports.com.br/wp-content/uploads/2025/11/manga-dir2x6.png',
-};
+export const MOCK_BASE_CALCA_BRIM = '/calculadora/base/calca-brim.png';
+export const MOCK_BASE_CALCA_JEANS = '/calculadora/base/calca-jeans.png';
 
 export const MOCK_STAMP_MAP: Record<string, string> = {
-  ...BASE_2X10,
-  'frente:esquerdo:8x6': 'https://www.meridianpro.com.br/wp-content/uploads/2026/01/ESQUERDA8X6.png',
-  'frente:centro:8x6':   'https://www.meridianpro.com.br/wp-content/uploads/2026/01/centro8x6.png',
-  'frente:direito:8x6':  'https://www.meridianpro.com.br/wp-content/uploads/2026/01/DIREITA8X6.png',
-  'frente:inferior:8x6': 'https://www.meridianpro.com.br/wp-content/uploads/2026/01/inferior8x6.png',
-  'frente:centro:10x15': 'https://www.meridianpro.com.br/wp-content/uploads/2026/01/frente10x15.png',
-  'frente:centro:29x21': 'https://www.meridianpro.com.br/wp-content/uploads/2026/01/frente29x21.png',
-  'costas:topo:8x6':   'https://www.meridianpro.com.br/wp-content/uploads/2026/01/TOPO8X6.png',
-  'costas:centro:8x6': 'https://www.meridianpro.com.br/wp-content/uploads/2026/01/CENTRO8X6-1.png',
-  'costas:barra:8x6':  'https://www.meridianpro.com.br/wp-content/uploads/2026/01/BARRA8X6.png',
-  'costas:topo:10x15':   'https://www.meridianpro.com.br/wp-content/uploads/2026/01/topo10x15.png',
-  'costas:centro:10x15': 'https://www.meridianpro.com.br/wp-content/uploads/2026/01/centro10x15.png',
-  'costas:barra:10x15':  'https://www.meridianpro.com.br/wp-content/uploads/2026/01/barra10x15.png',
-  'costas:topo:29x21':   'https://www.meridianpro.com.br/wp-content/uploads/2026/01/topo29x21.png',
-  'costas:centro:29x21': 'https://www.meridianpro.com.br/wp-content/uploads/2026/01/centro29x21.png',
-  'costas:barra:29x21':  'https://www.meridianpro.com.br/wp-content/uploads/2026/01/barra29x21.png',
-  'manga-esquerda:padrao:8x6': 'https://www.nortsports.com.br/wp-content/uploads/2025/11/manga-esq8x6.png',
-  'manga-direita:padrao:8x6':  'https://www.nortsports.com.br/wp-content/uploads/2025/11/manga-dir8x6.png',
+  // 2x10 - frente
+  'frente:esquerdo:2x10': '/calculadora/stamps/frente-esquerdo-2x10.png',
+  'frente:centro:2x10':   '/calculadora/stamps/frente-centro-2x10.png',
+  'frente:direito:2x10':  '/calculadora/stamps/frente-direito-2x10.png',
+  'frente:inferior:2x10': '/calculadora/stamps/frente-inferior-2x10.png',
+  // 2x10 - costas
+  'costas:topo:2x10':   '/calculadora/stamps/costas-topo-2x10.png',
+  'costas:centro:2x10': '/calculadora/stamps/costas-centro-2x10.png',
+  'costas:barra:2x10':  '/calculadora/stamps/costas-barra-2x10.png',
+  // 2x10 - mangas
+  'manga-esquerda:padrao:2x10': '/calculadora/stamps/manga-esquerda-padrao-2x10.png',
+  'manga-direita:padrao:2x10':  '/calculadora/stamps/manga-direita-padrao-2x10.png',
+
+  // 8x6 - frente
+  'frente:esquerdo:8x6': '/calculadora/stamps/frente-esquerdo-8x6.png',
+  'frente:centro:8x6':   '/calculadora/stamps/frente-centro-8x6.png',
+  'frente:direito:8x6':  '/calculadora/stamps/frente-direito-8x6.png',
+  'frente:inferior:8x6': '/calculadora/stamps/frente-inferior-8x6.png',
+  // 8x6 - costas
+  'costas:topo:8x6':   '/calculadora/stamps/costas-topo-8x6.png',
+  'costas:centro:8x6': '/calculadora/stamps/costas-centro-8x6.png',
+  'costas:barra:8x6':  '/calculadora/stamps/costas-barra-8x6.png',
+  // 8x6 - mangas
+  'manga-esquerda:padrao:8x6': '/calculadora/stamps/manga-esquerda-padrao-8x6.png',
+  'manga-direita:padrao:8x6':  '/calculadora/stamps/manga-direita-padrao-8x6.png',
+
+  // 10x15 (apenas frente centro e costas)
+  'frente:centro:10x15': '/calculadora/stamps/frente-centro-10x15.png',
+  'costas:topo:10x15':   '/calculadora/stamps/costas-topo-10x15.png',
+  'costas:centro:10x15': '/calculadora/stamps/costas-centro-10x15.png',
+  'costas:barra:10x15':  '/calculadora/stamps/costas-barra-10x15.png',
+
+  // 29x21 (apenas frente centro e costas)
+  'frente:centro:29x21': '/calculadora/stamps/frente-centro-29x21.png',
+  'costas:topo:29x21':   '/calculadora/stamps/costas-topo-29x21.png',
+  'costas:centro:29x21': '/calculadora/stamps/costas-centro-29x21.png',
+  'costas:barra:29x21':  '/calculadora/stamps/costas-barra-29x21.png',
 };
 
 // ========= PRODUTOS QUE PERMITEM BORDADO =========
