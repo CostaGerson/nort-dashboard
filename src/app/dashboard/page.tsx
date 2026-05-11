@@ -11,7 +11,7 @@ function Card({
 }: {
   title: string;
   description: string;
-  status: 'em breve' | 'externo' | 'em breve futuro';
+  status: 'ativo' | 'em breve' | 'externo' | 'em breve futuro';
   href?: string;
   external?: boolean;
   disabled?: boolean;
@@ -23,7 +23,11 @@ function Card({
         <div className="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center text-accent">
           {icon}
         </div>
-        <span className="text-[10px] uppercase tracking-wider font-semibold px-3 py-1 rounded-full bg-black/5 dark:bg-white/10 text-muted">
+        <span className={`text-[10px] uppercase tracking-wider font-semibold px-3 py-1 rounded-full ${
+          status === 'ativo'
+            ? 'bg-accent/15 text-accent'
+            : 'bg-black/5 dark:bg-white/10 text-muted'
+        }`}>
           {status}
         </span>
       </div>
@@ -86,9 +90,9 @@ export default async function DashboardHome() {
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <Card
           title="Calculadora"
-          description="Orçamentos de camisas com cálculo automático, histórico e exportação."
-          status="em breve"
-          disabled
+          description="Orçamentos de uniformes com cálculo automático e envio pelo WhatsApp."
+          status="ativo"
+          href="/calculadora"
           icon={
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="4" y="3" width="16" height="18" rx="3"></rect>
@@ -137,9 +141,9 @@ export default async function DashboardHome() {
           <div className="flex items-start justify-between gap-6 flex-wrap">
             <div>
               <p className="text-xs uppercase tracking-wider text-muted mb-2 font-medium">Status</p>
-              <h3 className="text-2xl font-bold mb-1">Fase 0 — Esqueleto</h3>
+              <h3 className="text-2xl font-bold mb-1">Fase 1 — Calculadora</h3>
               <p className="text-sm text-muted max-w-md">
-                Layout, login e deploy funcionando. Funcionalidades virão nas próximas fases.
+                Calculadora de orçamentos no ar. Próxima fase: Mockup integrado.
               </p>
             </div>
             <div className="flex items-center gap-2 glass rounded-full px-4 py-2">

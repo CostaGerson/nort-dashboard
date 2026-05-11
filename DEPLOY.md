@@ -36,7 +36,7 @@ git init
 git add .
 git commit -m "Fase 0 - esqueleto do dashboard"
 git branch -M main
-git remote add origin https://github.com/SEU-USUARIO/nort-dashboard.git
+git remote add origin https://github.com/CostaGerson/nort-dashboard.git
 git push -u origin main
 ```
 
@@ -153,13 +153,13 @@ Deve mostrar `nort-dashboard-app` e `nort-dashboard-db` como `running` / `health
 ### 3.5 Aplicar a estrutura do banco (🌐 VPS)
 
 ```bash
-docker compose exec app npx prisma@5.22.0 db push
+docker compose exec app npx prisma db push
 ```
 
 ### 3.6 Criar os usuários iniciais (🌐 VPS)
 
 ```bash
-docker compose exec app node scripts/seed.js
+docker compose exec app npx tsx scripts/seed.ts
 ```
 
 Deve aparecer:
@@ -226,10 +226,10 @@ docker compose down
 
 ### Adicionar / trocar senha de um usuário (🌐 VPS)
 
-Edite `scripts/seed.js` no PC, suba pro Git, e rode de novo na VPS:
+Edite `scripts/seed.ts` no PC, suba pro Git, e rode de novo na VPS:
 
 ```bash
-docker compose exec app node scripts/seed.js
+docker compose exec app npx tsx scripts/seed.ts
 ```
 
 O seed atualiza senhas existentes.
