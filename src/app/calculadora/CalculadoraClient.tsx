@@ -355,7 +355,7 @@ export default function CalculadoraClient() {
                     className={`w-12 h-12 rounded-full transition-all border-2 ${
                       ativo
                         ? 'border-[#FF6B35] scale-110 shadow-lg'
-                        : 'border-white/40 dark:border-white/10 hover:scale-105'
+                        : 'border-neutral-300 dark:border-neutral-700 hover:scale-105'
                     }`}
                     style={{ backgroundColor: cor.hex }}
                   />
@@ -372,7 +372,7 @@ export default function CalculadoraClient() {
                   className={`w-12 h-12 rounded-full transition-all border-2 ${
                     state.corEspecial
                       ? 'border-[#FF6B35] scale-110 shadow-lg'
-                      : 'border-white/40 dark:border-white/10 hover:scale-105'
+                      : 'border-neutral-300 dark:border-neutral-700 hover:scale-105'
                   }`}
                   style={{
                     background:
@@ -405,30 +405,50 @@ export default function CalculadoraClient() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Mockup */}
             <div className="space-y-3">
-              <GlassCard className="p-4">
-                <div className="relative w-full aspect-square bg-white/20 dark:bg-black/10 rounded-2xl overflow-hidden">
+              <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm p-4">
+                {/*
+                  Mockup por CAMADAS sobre fundo branco solido.
+                  As PNGs sao transparentes; o fundo precisa ser claro pra elas aparecerem.
+                  Sem overlay, sem opacidade nas camadas — cada estampa e uma layer limpa.
+                */}
+                <div className="relative w-full aspect-square bg-white rounded-2xl overflow-hidden ring-1 ring-black/5">
+                  {/* Camada 0: peca base */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={mockBaseUrl}
                     alt="Produto base"
-                    className="absolute inset-0 w-full h-full object-contain"
+                    className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none"
+                    draggable={false}
                   />
+
+                  {/* Camadas 1..N: estampas ja adicionadas (sempre todas visiveis) */}
                   {fixedStamps.map((url, idx) => (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      key={idx}
+                      key={`fixed-${idx}`}
                       src={url}
                       alt=""
-                      className="absolute inset-0 w-full h-full object-contain"
+                      className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none"
+                      draggable={false}
                     />
                   ))}
+
+                  {/* Camada de preview: estampa em edicao, ainda nao adicionada.
+                      Destacada por um anel tracejado laranja, NAO por opacidade. */}
                   {previewStampUrl && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={previewStampUrl}
-                      alt="Prévia"
-                      className="absolute inset-0 w-full h-full object-contain opacity-70"
-                    />
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={previewStampUrl}
+                        alt="Prévia"
+                        className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none"
+                        draggable={false}
+                      />
+                      <div className="absolute inset-2 rounded-xl border-2 border-dashed border-[#FF6B35]/70 pointer-events-none" />
+                      <span className="absolute top-3 left-3 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FF6B35] text-white">
+                        Prévia
+                      </span>
+                    </>
                   )}
                 </div>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-3 text-center">
@@ -436,9 +456,11 @@ export default function CalculadoraClient() {
                     ? 'Sublimação total: a arte cobre toda a peça.'
                     : isCalca
                     ? 'A personalização será aplicada no bolso.'
+                    : previewStampUrl
+                    ? 'A área tracejada é a prévia. Clique em "Adicionar" para confirmá-la.'
                     : 'A imagem mostra a frente e as costas. As marcações são as áreas personalizadas.'}
                 </p>
-              </GlassCard>
+              </div>
             </div>
 
             {/* Editor */}
@@ -721,7 +743,7 @@ export default function CalculadoraClient() {
                 valor={formatBRL(calculo.taxaProgramacao)}
               />
             )}
-            <div className="border-t border-white/20 dark:border-white/10 pt-3 mt-3" />
+            <div className="border-t border-neutral-200 dark:border-neutral-800 pt-3 mt-3" />
             <ResumoLinha
               label="Total estimado"
               valor={formatBRL(calculo.totalGeral)}
@@ -739,11 +761,11 @@ export default function CalculadoraClient() {
             <div className="text-sm font-semibold text-neutral-900 dark:text-white mb-3">
               Quantidade de peças
             </div>
-            <div className="inline-flex items-center gap-2 bg-white/40 dark:bg-white/5 backdrop-blur-md rounded-full border border-white/20 dark:border-white/10 p-1">
+            <div className="inline-flex items-center gap-2 bg-white dark:bg-neutral-900 rounded-full border border-neutral-200 dark:border-neutral-800 p-1">
               <button
                 type="button"
                 onClick={() => alterarQuantidade(state.quantidade - 1)}
-                className="w-10 h-10 rounded-full hover:bg-white/60 dark:hover:bg-white/10 text-neutral-900 dark:text-white font-bold transition-colors"
+                className="w-10 h-10 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-900 dark:text-white font-bold transition-colors"
               >
                 −
               </button>
@@ -757,7 +779,7 @@ export default function CalculadoraClient() {
               <button
                 type="button"
                 onClick={() => alterarQuantidade(state.quantidade + 1)}
-                className="w-10 h-10 rounded-full hover:bg-white/60 dark:hover:bg-white/10 text-neutral-900 dark:text-white font-bold transition-colors"
+                className="w-10 h-10 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-900 dark:text-white font-bold transition-colors"
               >
                 +
               </button>
@@ -784,7 +806,7 @@ export default function CalculadoraClient() {
       {/* PREÇO FLUTUANTE */}
       {produto && (
         <div className="fixed bottom-4 right-4 z-30 max-w-xs">
-          <GlassCard className="p-3 shadow-2xl">
+          <GlassCard className="p-3 shadow-md">
             <div className="text-base font-bold text-neutral-900 dark:text-white tabular-nums">
               {formatBRL(calculo.precoPorPeca)} cada
             </div>
@@ -806,7 +828,7 @@ export default function CalculadoraClient() {
                 ? 'bg-amber-500/90 text-white border-amber-300/40'
                 : toast.type === 'ok'
                 ? 'bg-green-500/90 text-white border-green-300/40'
-                : 'bg-neutral-900/90 text-white border-white/20'
+                : 'bg-neutral-900/95 text-white border-neutral-700'
             }`}
           >
             {toast.msg}
@@ -819,10 +841,12 @@ export default function CalculadoraClient() {
 
 // ========= COMPONENTES AUXILIARES =========
 
+// Card claro e leve. Mantem o nome "GlassCard" so pra nao quebrar
+// os ~15 usos espalhados — visualmente agora e um card branco simples.
 function GlassCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
     <div
-      className={`bg-white/50 dark:bg-white/5 backdrop-blur-xl rounded-3xl border border-white/40 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.06)] ${className}`}
+      className={`bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm ${className}`}
     >
       {children}
     </div>
@@ -873,8 +897,8 @@ function ProductCard({
       onClick={onClick}
       className={`text-left p-4 rounded-2xl transition-all border ${
         ativo
-          ? 'bg-white/80 dark:bg-white/10 border-[#FF6B35] shadow-lg ring-2 ring-[#FF6B35]/30'
-          : 'bg-white/40 dark:bg-white/5 backdrop-blur-md border-white/40 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/10 hover:-translate-y-0.5 hover:shadow-md'
+          ? 'bg-orange-50 dark:bg-neutral-800 border-[#FF6B35] ring-1 ring-[#FF6B35]/40'
+          : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 hover:shadow-sm'
       }`}
     >
       <div className="flex items-start justify-between gap-2 mb-1">
@@ -909,10 +933,10 @@ function PillButton({
       disabled={disabled}
       className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
         disabled
-          ? 'bg-neutral-200/40 dark:bg-white/5 text-neutral-400 dark:text-neutral-600 cursor-not-allowed opacity-50'
+          ? 'bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-600 cursor-not-allowed'
           : ativo
-          ? 'bg-[#FF6B35] text-white shadow-md'
-          : 'bg-white/60 dark:bg-white/5 text-neutral-700 dark:text-neutral-200 border border-white/40 dark:border-white/10 hover:bg-white/80 dark:hover:bg-white/10'
+          ? 'bg-[#FF6B35] text-white shadow-sm'
+          : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-700'
       }`}
     >
       {children}
@@ -930,7 +954,7 @@ function PillToggle({
   onChange: (v: string) => void;
 }) {
   return (
-    <div className="inline-flex bg-white/40 dark:bg-white/5 backdrop-blur-md rounded-full border border-white/40 dark:border-white/10 p-1">
+    <div className="inline-flex bg-neutral-100 dark:bg-neutral-800 rounded-full border border-neutral-200 dark:border-neutral-700 p-1">
       {options.map((opt) => (
         <button
           key={opt.value}
@@ -938,8 +962,8 @@ function PillToggle({
           onClick={() => onChange(opt.value)}
           className={`px-5 py-1.5 rounded-full text-sm font-medium transition-all ${
             value === opt.value
-              ? 'bg-[#FF6B35] text-white shadow'
-              : 'text-neutral-600 dark:text-neutral-300 hover:bg-white/40 dark:hover:bg-white/5'
+              ? 'bg-[#FF6B35] text-white shadow-sm'
+              : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
           }`}
         >
           {opt.label}
