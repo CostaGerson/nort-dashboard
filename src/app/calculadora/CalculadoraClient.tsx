@@ -240,6 +240,22 @@ export default function CalculadoraClient() {
     return MOCK_BASE_BY_COLOR['preto'];
   }, [tipoProduto, isSublimacaoTotal, state.corEspecial, state.corSelecionada]);
 
+  // Cor de fundo do mockup.
+  // As PNGs das pecas tem fundo chapado (nao sao transparentes), entao o
+  // container precisa combinar com a cor da peca pra a imagem nao "vazar"
+  // como um retangulo. Pecas claras (branco / cor especial) usam um cinza
+  // bem claro pra a camisa nao sumir no fundo branco.
+  const fundoMockup = useMemo(() => {
+    const CINZA_CLARO = '#EFEFEF';
+    if (isCalca) return CINZA_CLARO;
+    if (isSublimacaoTotal || state.corEspecial) return CINZA_CLARO;
+    if (state.corSelecionada) {
+      if (state.corSelecionada.id === 'branco') return CINZA_CLARO;
+      return state.corSelecionada.hex;
+    }
+    return '#000000';
+  }, [isCalca, isSublimacaoTotal, state.corEspecial, state.corSelecionada]);
+
   const previewStampUrl = useMemo(() => {
     if (isSublimacaoTotal || isCalca) return null;
     if (!state.localAtual || !state.subLocalAtual || !state.tamanhoAtual) return null;
@@ -411,7 +427,10 @@ export default function CalculadoraClient() {
                   As PNGs sao transparentes; o fundo precisa ser claro pra elas aparecerem.
                   Sem overlay, sem opacidade nas camadas — cada estampa e uma layer limpa.
                 */}
-                <div className="relative w-full aspect-square bg-white rounded-2xl overflow-hidden ring-1 ring-black/5">
+                <div
+                  className="relative w-full aspect-square rounded-2xl overflow-hidden ring-1 ring-black/5 transition-colors"
+                  style={{ backgroundColor: fundoMockup }}
+                >
                   {/* Camada 0: peca base */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
