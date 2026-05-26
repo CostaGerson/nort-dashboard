@@ -15,7 +15,7 @@ function WizardSwitch() {
       <div
         key={step}
         style={{
-          animation: "slide-in 700ms cubic-bezier(0.22, 1, 0.36, 1)",
+          animation: "slide-in 1100ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       >
         {step === 1 && <Tela1Produto />}
@@ -27,7 +27,10 @@ function WizardSwitch() {
         @keyframes slide-in {
           0% {
             opacity: 0;
-            transform: translateX(64px);
+            transform: translateX(120px);
+          }
+          60% {
+            opacity: 1;
           }
           100% {
             opacity: 1;

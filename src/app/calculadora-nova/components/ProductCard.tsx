@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { formatBRL } from "@/lib/calculadora-nova/constants";
 import type { Produto } from "@/lib/calculadora-nova/types";
 import { ProdutoIcon } from "./ProdutoIcon";
@@ -12,23 +12,30 @@ interface Props {
 }
 
 export function ProductCard({ produto, variant, onSelect }: Props) {
-  const [pressing, setPressing] = useState(false);
+  const [pulsing, setPulsing] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isDestaque = variant === "destaque";
+
+  function handleClick() {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setPulsing(true);
+    // Espera o pulso completar antes de mudar de tela
+    timerRef.current = setTimeout(() => {
+      setPulsing(false);
+      onSelect();
+    }, 550);
+  }
 
   return (
     <button
       type="button"
-      onClick={onSelect}
-      onMouseDown={() => setPressing(true)}
-      onMouseUp={() => setPressing(false)}
-      onMouseLeave={() => setPressing(false)}
+      onClick={handleClick}
       aria-label={`${produto.nome}, a partir de ${formatBRL(produto.precoBase)}`}
-      className={`group relative flex flex-col bg-white border border-black/[0.04] text-left transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B35] focus-visible:ring-offset-2 ${
+      className={`group relative flex flex-col bg-white border border-black/[0.04] text-left transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B35] focus-visible:ring-offset-2 cursor-pointer ${
         isDestaque
           ? "rounded-3xl p-6 h-[280px] shadow-[0_8px_32px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.10)]"
           : "rounded-2xl p-4 h-[180px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_28px_rgba(0,0,0,0.08)]"
-      } ${pressing ? "scale-[0.97]" : "scale-100"}`}
-      style={{ transitionProperty: "transform, box-shadow" }}
+      } ${pulsing ? "animate-card-pulse" : ""}`}
     >
       {/* Tag */}
       {produto.tag && (
@@ -93,15 +100,52 @@ export function ProductCard({ produto, variant, onSelect }: Props) {
         )}
       </div>
 
-      {/* Glow no clique */}
-      {pressing && (
+      {/* Glow do pulso */}
+      {pulsing && (
         <span
-          className="absolute inset-0 rounded-3xl pointer-events-none"
-          style={{
-            boxShadow: "0 0 0 2px #FF6B35, 0 0 24px rgba(255,107,53,0.35)",
-          }}
+          className={`absolute inset-0 pointer-events-none animate-pulse-glow ${
+            isDestaque ? "rounded-3xl" : "rounded-2xl"
+          }`}
         />
       )}
+
+      <style jsx>{`
+        @keyframes card-pulse {
+          0% {
+            transform: scale(1);
+          }
+          25% {
+            transform: scale(0.96);
+          }
+          60% {
+            transform: scale(1.02);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+        .animate-card-pulse {
+          animation: card-pulse 550ms cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes pulse-glow {
+          0% {
+            box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7),
+              0 0 0 0 rgba(255, 107, 53, 0);
+          }
+          50% {
+            box-shadow: 0 0 0 6px rgba(255, 107, 53, 0.9),
+              0 0 32px 8px rgba(255, 107, 53, 0.45);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(255, 107, 53, 0),
+              0 0 0 0 rgba(255, 107, 53, 0);
+          }
+        }
+        .animate-pulse-glow {
+          animation: pulse-glow 550ms ease-out;
+        }
+      `}</style>
     </button>
   );
 }
