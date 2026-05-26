@@ -5,7 +5,7 @@ import {
   useWizard,
 } from "@/lib/calculadora-nova/wizard-context";
 import { Tela1Produto } from "./components/Tela1Produto";
-import { Tela2Placeholder } from "./components/Tela2Placeholder";
+import { Tela2Config } from "./components/Tela2Config";
 
 function WizardSwitch() {
   const { step } = useWizard();
@@ -19,8 +19,8 @@ function WizardSwitch() {
         }}
       >
         {step === 1 && <Tela1Produto />}
-        {step === 2 && <Tela2Placeholder />}
-        {step === 3 && <Tela2Placeholder />}
+        {step === 2 && <Tela2Config />}
+        {step === 3 && <Tela2Config />}
       </div>
 
       <style jsx global>{`

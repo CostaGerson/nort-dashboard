@@ -156,6 +156,14 @@ export function WizardProvider({ children }: { children: ReactNode }) {
         if (!posicaoDisponivelNaTecnica(pos, t)) return false;
         return tamanhosPermitidos(pos, t).includes(e.tamanho);
       });
+      const removidas = p.estampas.length - estampasValidas.length;
+      if (typeof window !== "undefined" && removidas > 0) {
+        window.dispatchEvent(
+          new CustomEvent("nort-toast", {
+            detail: `${removidas} estampa${removidas > 1 ? "s" : ""} removida${removidas > 1 ? "s" : ""} (não cabe${removidas > 1 ? "m" : ""} em ${t === "bordado" ? "bordado" : "DTF"}).`,
+          }),
+        );
+      }
       return { ...p, tecnica: t, estampas: estampasValidas };
     });
   }, []);
