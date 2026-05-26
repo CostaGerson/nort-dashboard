@@ -6,7 +6,7 @@ import {
   CORES,
   CORES_POR_PRODUTO,
 } from "@/lib/calculadora-nova/constants";
-import type { CorId, MangaTipo, Tecnica } from "@/lib/calculadora-nova/types";
+import type { CorId } from "@/lib/calculadora-nova/types";
 
 export default function ColunaFina() {
   const { state, setManga, setCor, setTecnica } = useWizard();
@@ -19,7 +19,7 @@ export default function ColunaFina() {
 
   const mostrarManga = produto.permiteManga;
   const mostrarCor = !ehSublimacao && !corTravada;
-  const mostrarTecnica = !ehSublimacao && !ehCalca; // só camiseta normal
+  const mostrarTecnica = !ehSublimacao && !ehCalca;
   const podeBordar = produto.permiteBordado;
 
   const coresDisponiveis = CORES_POR_PRODUTO[produto.id] ?? [];
@@ -27,12 +27,11 @@ export default function ColunaFina() {
   return (
     <aside className="rounded-3xl bg-white p-4 shadow-[0_8px_32px_rgba(0,0,0,0.06)] ring-1 ring-black/5 lg:p-3">
       <div className="flex flex-row gap-4 lg:flex-col lg:gap-0 lg:divide-y lg:divide-[#E8E6E1]">
-        {/* Manga */}
         {mostrarManga && (
           <Bloco titulo="Manga">
             <div className="flex flex-row gap-2 lg:flex-col">
-              <PillManga ativo={state.manga === "curta"} onClick={() => setManga("curta")} label="Curta" />
-              <PillManga
+              <PillToggle ativo={state.manga === "curta"} onClick={() => setManga("curta")} label="Curta" />
+              <PillToggle
                 ativo={state.manga === "longa"}
                 onClick={() => setManga("longa")}
                 label="Longa"
@@ -42,7 +41,6 @@ export default function ColunaFina() {
           </Bloco>
         )}
 
-        {/* Cor */}
         {mostrarCor && (
           <Bloco titulo="Cor">
             <ul className="flex flex-row gap-2 lg:flex-col lg:gap-0">
@@ -59,17 +57,16 @@ export default function ColunaFina() {
           </Bloco>
         )}
 
-        {/* Técnica */}
         {mostrarTecnica && (
           <Bloco titulo="Técnica">
             <div className="flex flex-row gap-2 lg:flex-col">
-              <PillTecnica
+              <PillToggle
                 ativo={state.tecnica === "dtf"}
                 onClick={() => setTecnica("dtf")}
                 label="DTF"
               />
               {podeBordar && (
-                <PillTecnica
+                <PillToggle
                   ativo={state.tecnica === "bordado"}
                   onClick={() => setTecnica("bordado")}
                   label="Bordado"
@@ -97,7 +94,7 @@ function Bloco({ titulo, children }: { titulo: string; children: React.ReactNode
   );
 }
 
-function PillManga({
+function PillToggle({
   ativo,
   onClick,
   label,
@@ -122,28 +119,6 @@ function PillManga({
           {hint}
         </span>
       )}
-    </button>
-  );
-}
-
-function PillTecnica({
-  ativo,
-  onClick,
-  label,
-}: {
-  ativo: boolean;
-  onClick: () => void;
-  label: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`cursor-pointer rounded-full px-3 py-2 text-[13px] font-medium transition focus:outline-none focus:ring-2 focus:ring-[#FF6B35] ${
-        ativo ? "bg-[#1A1A1A] text-white" : "bg-[#F5F3EF] text-[#1A1A1A] hover:bg-[#E8E6E1]"
-      }`}
-    >
-      {label}
     </button>
   );
 }

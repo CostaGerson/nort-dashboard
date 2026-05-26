@@ -33,12 +33,8 @@ export default function ColunaResumo() {
         <dl className="space-y-2 text-[13px]">
           <Linha label="Produto" valor={produto.nome} />
 
-          {!ehSublimacao && (
-            <Linha label="Cor" valor={corNome} />
-          )}
-          {ehSublimacao && (
-            <Linha label="Cor" valor="Arte total" />
-          )}
+          {!ehSublimacao && <Linha label="Cor" valor={corNome} />}
+          {ehSublimacao && <Linha label="Cor" valor="Arte total" />}
 
           {!ehCalca && produto.permiteManga && (
             <Linha label="Manga" valor={state.manga === "curta" ? "Curta" : "Longa"} />
@@ -55,20 +51,21 @@ export default function ColunaResumo() {
             <Linha label="Bolso" valor={state.bolsoCalca ? "Sim" : "Não"} />
           )}
 
-          <Linha label="Quantidade" valor={`${state.quantidade} ${state.quantidade === 1 ? "peça" : "peças"}`} />
+          <Linha
+            label="Quantidade"
+            valor={`${state.quantidade} ${state.quantidade === 1 ? "peça" : "peças"}`}
+          />
 
           {resultado.taxaProgramacao > 0 && (
             <Linha label="Taxa bordado" valor={formatBRL(resultado.taxaProgramacao)} />
           )}
         </dl>
 
-        {/* Por peça */}
         <div className="mt-4 rounded-xl bg-white/10 p-3">
           <p className="text-[11px] uppercase tracking-wider text-white/60">por peça</p>
           <p className="text-[20px] font-semibold">{formatBRL(resultado.precoPeca)}</p>
         </div>
 
-        {/* Total */}
         <div className="mt-2 rounded-xl bg-[#FF6B35] p-4">
           <p className="text-[11px] uppercase tracking-wider text-white/80">total</p>
           <p className="text-[28px] font-bold leading-tight">{formatBRL(resultado.total)}</p>
