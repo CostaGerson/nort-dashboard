@@ -4,8 +4,8 @@ import {
   WizardProvider,
   useWizard,
 } from "@/lib/calculadora-nova/wizard-context";
-import { Tela1Produto } from "./Tela1Produto";
-import { Tela2Placeholder } from "./Tela2Placeholder";
+import { Tela1Produto } from "./components/Tela1Produto";
+import { Tela2Placeholder } from "./components/Tela2Placeholder";
 
 function WizardSwitch() {
   const { step } = useWizard();
@@ -14,7 +14,6 @@ function WizardSwitch() {
     <div className="relative overflow-hidden">
       <div
         key={step}
-        className="animate-slide-in"
         style={{
           animation: "slide-in 350ms cubic-bezier(0.4, 0, 0.2, 1)",
         }}
