@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 import type {
@@ -8,7 +8,7 @@ import type {
   Tecnica,
 } from "@/lib/calculadora-nova/types";
 import { TAMANHOS_LABEL } from "@/lib/calculadora-nova/constants";
-import { tamanhosPermitidos, labelPosicao } from "@/lib/calculadora-nova/posicoes";
+import { getPosicao, tamanhosPermitidos, labelPosicao } from "@/lib/calculadora-nova/posicoes";
 
 interface Props {
   local: LocalEstampa;
@@ -28,7 +28,8 @@ export default function PopoverTamanhos({
   onFechar,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const permitidos = tamanhosPermitidos({ local, subLocal }, tecnica);
+  const pos = getPosicao(local, subLocal);
+  const permitidos = pos ? tamanhosPermitidos(pos, tecnica) : [];
 
   // fechar com ESC
   useEffect(() => {
@@ -55,7 +56,7 @@ export default function PopoverTamanhos({
         <div className="mb-4 flex items-start justify-between gap-4">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-wider text-[#9B9A95]">
-              Posição
+              PosiÃ§Ã£o
             </p>
             <h3 className="text-[18px] font-semibold text-[#1A1A1A]">
               {labelPosicao(local, subLocal)}
@@ -104,3 +105,4 @@ export default function PopoverTamanhos({
     </div>
   );
 }
+

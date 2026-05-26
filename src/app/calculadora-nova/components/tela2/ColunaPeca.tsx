@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useWizard } from "@/lib/calculadora-nova/wizard-context";
@@ -6,7 +6,6 @@ import { getProduto, TAMANHOS_LABEL } from "@/lib/calculadora-nova/constants";
 import { mensagemFaixa } from "@/lib/calculadora-nova/pricing";
 import {
   POSICOES,
-  tamanhosPermitidos,
   posicaoDisponivelNaTecnica,
   labelPosicao,
 } from "@/lib/calculadora-nova/posicoes";
@@ -18,7 +17,7 @@ import type {
 import SilhuetaPeca from "./SilhuetaPeca";
 import PopoverTamanhos from "./PopoverTamanhos";
 
-// Posições em % do viewBox da silhueta (400x400).
+// PosiÃ§Ãµes em % do viewBox da silhueta (400x400).
 // FRENTE
 const POS_FRENTE: Record<string, { x: number; y: number }> = {
   "frente:esquerdo": { x: 38, y: 38 },
@@ -58,7 +57,7 @@ export default function ColunaPeca() {
 
   return (
     <section className="flex flex-col gap-4 md:gap-6">
-      {/* Peça(s) */}
+      {/* PeÃ§a(s) */}
       <div className="rounded-3xl bg-white p-4 shadow-[0_8px_32px_rgba(0,0,0,0.06)] ring-1 ring-black/5 md:p-6">
         {ehSublimacao ? (
           <PecaSublimacao />
@@ -72,7 +71,7 @@ export default function ColunaPeca() {
         )}
       </div>
 
-      {/* Lista de estampas (só camiseta normal) */}
+      {/* Lista de estampas (sÃ³ camiseta normal) */}
       {!ehSublimacao && !ehCalca && (
         <div className="rounded-3xl bg-white p-4 shadow-[0_8px_32px_rgba(0,0,0,0.06)] ring-1 ring-black/5 md:p-6">
           <h3 className="mb-3 text-[14px] font-semibold text-[#1A1A1A]">
@@ -86,14 +85,14 @@ export default function ColunaPeca() {
 
           {state.estampas.length === 0 ? (
             <p className="text-[13px] text-[#9B9A95]">
-              nenhuma estampa ainda — toque num + na peça
+              nenhuma estampa ainda â€” toque num + na peÃ§a
             </p>
           ) : (
             <ul className="flex flex-wrap gap-2">
               {state.estampas.map((e) => (
                 <li key={e.id}>
                   <span className="inline-flex items-center gap-2 rounded-full bg-[#F5F3EF] py-1.5 pl-3 pr-1.5 text-[13px] text-[#1A1A1A]">
-                    {labelPosicao(e.local, e.subLocal)} · {TAMANHOS_LABEL[e.tamanho]} ·{" "}
+                    {labelPosicao(e.local, e.subLocal)} Â· {TAMANHOS_LABEL[e.tamanho]} Â·{" "}
                     {state.tecnica === "dtf" ? "DTF" : "Bordado"}
                     <button
                       type="button"
@@ -113,7 +112,7 @@ export default function ColunaPeca() {
         </div>
       )}
 
-      {/* Quantidade + régua */}
+      {/* Quantidade + rÃ©gua */}
       <div className="rounded-3xl bg-white p-4 shadow-[0_8px_32px_rgba(0,0,0,0.06)] ring-1 ring-black/5 md:p-6">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:items-center">
           {/* Controle de quantidade */}
@@ -128,7 +127,7 @@ export default function ColunaPeca() {
                 aria-label="Diminuir quantidade"
                 className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-[#F5F3EF] text-[18px] font-medium text-[#1A1A1A] transition hover:bg-[#E8E6E1] focus:outline-none focus:ring-2 focus:ring-[#FF6B35]"
               >
-                −
+                âˆ’
               </button>
               <input
                 type="number"
@@ -152,7 +151,7 @@ export default function ColunaPeca() {
             </div>
           </div>
 
-          {/* Régua de faixa */}
+          {/* RÃ©gua de faixa */}
           <ReguaFaixa />
         </div>
 
@@ -162,7 +161,7 @@ export default function ColunaPeca() {
         )}
       </div>
 
-      {/* Popover de tamanhos (provisório, sem radial) */}
+      {/* Popover de tamanhos (provisÃ³rio, sem radial) */}
       {popover && (
         <PopoverTamanhos
           local={popover.local}
@@ -238,7 +237,7 @@ function PecaVista({
         {/* Overlay com "+" */}
         {posicoesDestaVista.map((p) => {
           const disponivel = posicaoDisponivelNaTecnica(p, state.tecnica);
-          if (!disponivel) return null; // posições bloqueadas somem
+          if (!disponivel) return null; // posiÃ§Ãµes bloqueadas somem
 
           const key = `${p.local}:${p.subLocal}`;
           const coord = mapaPos[key];
@@ -274,7 +273,7 @@ function PecaVista({
                   : "h-7 w-7 bg-[#FF6B35]/30 text-white hover:bg-[#FF6B35]/60"
               }`}
             >
-              {ocupado ? estampa.tamanho.replace("x", "×") : (
+              {ocupado ? estampa.tamanho.replace("x", "Ã—") : (
                 <span className="text-[18px] leading-none text-white/80">+</span>
               )}
             </button>
@@ -310,7 +309,7 @@ function PecaSublimacao() {
         </p>
       </div>
       <div className="md:col-span-2 rounded-2xl bg-[#FFF4EE] p-4 text-center text-[13px] text-[#FF6B35]">
-        Peça inteira personalizada — você envia a arte depois.
+        PeÃ§a inteira personalizada â€” vocÃª envia a arte depois.
       </div>
     </div>
   );
@@ -354,11 +353,11 @@ function PecaCalca() {
                 : "bg-[#F5F3EF] text-[#1A1A1A] hover:bg-[#E8E6E1]"
             }`}
           >
-            Não
+            NÃ£o
           </button>
         </div>
         <p className="text-[11px] text-[#9B9A95]">
-          Bordado no bolso (taxa de programação: R$ 20 uma vez).
+          Bordado no bolso (taxa de programaÃ§Ã£o: R$ 20 uma vez).
         </p>
       </div>
     </div>
@@ -375,7 +374,7 @@ function ReguaFaixa() {
   const marcas = ehSubli ? ["1", "6", "11-20", "21+"] : ["1", "6", "11-19", "20+"];
   const fronteiras = ehSubli ? [1, 6, 11, 21] : [1, 6, 11, 20];
 
-  // posição do pino em % (linear entre fronteiras)
+  // posiÃ§Ã£o do pino em % (linear entre fronteiras)
   const q = state.quantidade;
   const max = ehSubli ? 25 : 24;
   const pct = Math.min(100, (Math.min(q, max) / max) * 100);
@@ -389,7 +388,7 @@ function ReguaFaixa() {
   return (
     <div>
       <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-[#9B9A95]">
-        Faixa de preço
+        Faixa de preÃ§o
       </p>
       <div className="relative h-[3px] w-full rounded-full bg-[#E8E6E1]">
         <div
@@ -411,3 +410,4 @@ function ReguaFaixa() {
     </div>
   );
 }
+
