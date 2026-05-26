@@ -40,7 +40,7 @@ export default function ColunaResumo() {
             <Linha label="Cor" valor="Arte total" />
           )}
 
-          {!ehCalca && produto.permiteMangaLonga && (
+          {!ehCalca && produto.permiteManga && (
             <Linha label="Manga" valor={state.manga === "curta" ? "Curta" : "Longa"} />
           )}
 

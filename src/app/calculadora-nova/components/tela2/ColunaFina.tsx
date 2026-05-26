@@ -17,7 +17,7 @@ export default function ColunaFina() {
   const ehCalca = produto.tipo === "calca";
   const corTravada = produto.id === "calca-jeans";
 
-  const mostrarManga = produto.permiteMangaLonga;
+  const mostrarManga = produto.permiteManga;
   const mostrarCor = !ehSublimacao && !corTravada;
   const mostrarTecnica = !ehSublimacao && !ehCalca; // só camiseta normal
   const podeBordar = produto.permiteBordado;
