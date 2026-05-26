@@ -15,11 +15,11 @@ export function Tela1Produto() {
   return (
     <div className="min-h-screen bg-[#F5F3EF] text-[#1A1A1A]">
       {/* Header */}
-      <header className="px-4 md:px-8 lg:px-12 h-[60px] border-b border-[#E8E6E1] flex items-center">
+      <header className="px-4 md:px-8 lg:px-12 h-[60px] border-b border-[#E8E6E1] grid grid-cols-[auto_1fr_auto] items-center gap-2">
         <button
           type="button"
           onClick={() => router.push("/dashboard")}
-          className="w-9 h-9 grid place-items-center rounded-full hover:bg-black/5 transition-colors"
+          className="relative z-10 w-10 h-10 grid place-items-center rounded-full hover:bg-black/5 active:bg-black/10 transition-colors cursor-pointer"
           aria-label="Voltar pro dashboard"
         >
           <svg
@@ -36,9 +36,10 @@ export function Tela1Produto() {
             <polyline points="12 19 5 12 12 5" />
           </svg>
         </button>
-        <span className="flex-1 text-center text-xs font-medium text-[#9B9A95] -ml-9">
+        <span className="text-center text-xs font-medium text-[#9B9A95] pointer-events-none select-none">
           passo 1 de 3 · produto
         </span>
+        <span className="w-10 h-10" aria-hidden />
       </header>
 
       {/* Conteúdo */}
