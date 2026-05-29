@@ -35,7 +35,7 @@ export default function ColunaFina() {
                 ativo={state.manga === "longa"}
                 onClick={() => setManga("longa")}
                 label="Longa"
-                hint={ehSublimacao ? undefined : "+R$4"}
+                hint={ehSublimacao ? undefined : "+R$4 a peça"}
               />
             </div>
           </Bloco>
@@ -54,6 +54,11 @@ export default function ColunaFina() {
                 </li>
               ))}
             </ul>
+            {coresDisponiveis.includes("especial") && (
+              <p className="mt-2 text-[10px] leading-tight text-[#9B9A95]">
+                Quer outra cor? A gente faz (+15%)
+              </p>
+            )}
           </Bloco>
         )}
 
@@ -73,7 +78,12 @@ export default function ColunaFina() {
                 />
               )}
             </div>
-            <p className="mt-2 text-[10px] leading-tight text-[#9B9A95]">
+            <p className="mt-2 text-[11px] font-medium leading-snug text-[#1A1A1A]">
+              {state.tecnica === "dtf"
+                ? "Estampa colorida, encaixa qualquer arte"
+                : "Acabamento fino que dura (+R$20)"}
+            </p>
+            <p className="mt-1 text-[10px] leading-tight text-[#9B9A95]">
               vale pra todas as estampas
             </p>
           </Bloco>

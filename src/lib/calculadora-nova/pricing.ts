@@ -120,6 +120,16 @@ function zerado(): ResultadoCalculo {
   };
 }
 
+// Quanto o preço por peça caiu por causa da quantidade (vs faixa 1-5).
+// Retorna 0 quando não há economia (ex: camiseta sem estampa, base não muda).
+export function economiaPorPeca(state: OrcamentoState): number {
+  if (!state.produtoId) return 0;
+  const base = calcular({ ...state, quantidade: 1 }).precoPeca;
+  const atual = calcular(state).precoPeca;
+  const economia = base - atual;
+  return economia > 0.005 ? economia : 0;
+}
+
 // Mensagem de incentivo de faixa — seção 8 da lógica
 export function mensagemFaixa(state: OrcamentoState): string | null {
   if (!state.produtoId) return null;

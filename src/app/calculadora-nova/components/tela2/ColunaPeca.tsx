@@ -2,8 +2,8 @@
 
 import { useRef, useState } from "react";
 import { useWizard } from "@/lib/calculadora-nova/wizard-context";
-import { getProduto, TAMANHOS_LABEL } from "@/lib/calculadora-nova/constants";
-import { mensagemFaixa } from "@/lib/calculadora-nova/pricing";
+import { getProduto, TAMANHOS_LABEL, formatBRL } from "@/lib/calculadora-nova/constants";
+import { mensagemFaixa, economiaPorPeca } from "@/lib/calculadora-nova/pricing";
 import {
   POSICOES,
   posicaoDisponivelNaTecnica,
@@ -108,7 +108,14 @@ export default function ColunaPeca() {
         </div>
 
         {(ehSublimacao || ehCalca || state.estampas.length > 0) && (
-          <p className="mt-4 text-[13px] text-[#9B9A95]">{mensagemFaixa(state)}</p>
+          <>
+            <p className="mt-4 text-[13px] text-[#9B9A95]">{mensagemFaixa(state)}</p>
+            {economiaPorPeca(state) > 0 && (
+              <p className="mt-1 text-[13px] font-medium text-[#FF6B35]">
+                Boa! Caiu {formatBRL(economiaPorPeca(state))} por peça 🎉
+              </p>
+            )}
+          </>
         )}
       </div>
 

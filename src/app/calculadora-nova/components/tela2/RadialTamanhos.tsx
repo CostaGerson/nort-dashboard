@@ -23,6 +23,13 @@ interface Props {
 
 const TAMANHOS_TODOS: TamanhoEstampa[] = ["2x10", "8x6", "10x15", "29x21"];
 
+const TAMANHOS_DESC: Record<TamanhoEstampa, string> = {
+  "2x10": "Punho ou peito pequeno",
+  "8x6": "Ótimo pra bolso ou peito",
+  "10x15": "Peito grande ou costas",
+  "29x21": "Costas inteira",
+};
+
 // 4 chips em arco: superior-esquerdo, superior-direito, inferior-esquerdo, inferior-direito
 const OFFSETS = [
   { x: -75, y: -75, delay: 60 },  // 2x10  — sup esq
@@ -158,6 +165,37 @@ export default function RadialTamanhos({
                 )}
               </span>
             </button>
+          );
+        })}
+
+        {/* rótulos descritivos sob cada chip */}
+        {OFFSETS.map((o, i) => {
+          const tamanho = TAMANHOS_TODOS[i];
+          const ok = permitidos.includes(tamanho);
+          return (
+            <div
+              key={`desc-${i}`}
+              className="pointer-events-none absolute text-center"
+              style={{
+                left: "0px",
+                top: "0px",
+                width: "128px",
+                marginLeft: "-64px",
+                transform: `translate(${o.x}px, ${o.y + 36}px)`,
+                opacity: aberto ? 1 : 0,
+                transition: `opacity 200ms ease ${o.delay + 120}ms`,
+              }}
+            >
+              <span
+                className="inline-block whitespace-nowrap rounded-md px-1.5 py-0.5 text-[9px] font-medium leading-none"
+                style={{
+                  background: "rgba(255,255,255,0.94)",
+                  color: ok ? "#1A1A1A" : "#9B9A95",
+                }}
+              >
+                {TAMANHOS_DESC[tamanho]}
+              </span>
+            </div>
           );
         })}
       </div>
