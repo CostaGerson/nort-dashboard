@@ -24,10 +24,10 @@ interface Props {
 const TAMANHOS_TODOS: TamanhoEstampa[] = ["2x10", "8x6", "10x15", "29x21"];
 
 const TAMANHOS_DESC: Record<TamanhoEstampa, string> = {
-  "2x10": "Punho ou peito pequeno",
-  "8x6": "Ótimo pra bolso ou peito",
-  "10x15": "Peito grande ou costas",
-  "29x21": "Costas inteira",
+  "2x10": "Nomes e marcas",
+  "8x6": "Ótimo para logos e brasões",
+  "10x15": "Estampas pequenas",
+  "29x21": "Estampas grandes",
 };
 
 // 4 chips em arco: superior-esquerdo, superior-direito, inferior-esquerdo, inferior-direito

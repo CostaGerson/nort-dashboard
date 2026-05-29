@@ -81,7 +81,7 @@ export default function ColunaFina() {
             <p className="mt-2 text-[11px] font-medium leading-snug text-[#1A1A1A]">
               {state.tecnica === "dtf"
                 ? "Estampa colorida, encaixa qualquer arte"
-                : "Acabamento fino que dura (+R$20)"}
+                : "O clássico que todo mundo conhece (+R$20)"}
             </p>
             <p className="mt-1 text-[10px] leading-tight text-[#9B9A95]">
               vale pra todas as estampas

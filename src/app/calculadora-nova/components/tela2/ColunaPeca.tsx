@@ -381,18 +381,56 @@ function ReguaFaixa() {
     ? [{ label: "1", q: 1 }, { label: "6", q: 6 }, { label: "11-20", q: 11 }, { label: "21+", q: 21 }]
     : [{ label: "1", q: 1 }, { label: "6", q: 6 }, { label: "11-19", q: 11 }, { label: "20+", q: 20 }];
 
-  const max = ehSubli ? 25 : 24;
+  const n = marcas.length;
   const q = state.quantidade;
-  const pct = Math.min(100, (Math.min(q, max) / max) * 100);
+
+  // posição (0-100%) de cada marca: igualmente espaçadas
+  const posMarca = (i: number) => (i / (n - 1)) * 100;
+
+  // quantidade -> posição (%) por trechos, casando com as marcas
+  function qToPct(qty: number): number {
+    if (qty <= marcas[0].q) return 0;
+    if (qty >= marcas[n - 1].q) return 100;
+    for (let i = 0; i < n - 1; i++) {
+      const a = marcas[i].q;
+      const b = marcas[i + 1].q;
+      if (qty >= a && qty <= b) {
+        const frac = (qty - a) / (b - a);
+        return posMarca(i) + frac * (posMarca(i + 1) - posMarca(i));
+      }
+    }
+    return 100;
+  }
+
+  // posição (%) -> quantidade (inverso por trechos)
+  function pctToQ(pct: number): number {
+    if (pct <= 0) return marcas[0].q;
+    if (pct >= 100) return marcas[n - 1].q;
+    for (let i = 0; i < n - 1; i++) {
+      const p0 = posMarca(i);
+      const p1 = posMarca(i + 1);
+      if (pct >= p0 && pct <= p1) {
+        const frac = (pct - p0) / (p1 - p0);
+        const a = marcas[i].q;
+        const b = marcas[i + 1].q;
+        return Math.max(1, Math.round(a + frac * (b - a)));
+      }
+    }
+    return marcas[n - 1].q;
+  }
+
+  const pct = qToPct(q);
 
   let faixaAtivaIdx = 0;
-  for (let i = 0; i < marcas.length; i++) {
+  for (let i = 0; i < n; i++) {
     if (q >= marcas[i].q) faixaAtivaIdx = i;
   }
 
+  // slider opera em escala de posição 0-1000 (não em quantidade direta),
+  // pra que thumb, preenchimento e marcas fiquem sempre alinhados
   function onSlider(e: React.ChangeEvent<HTMLInputElement>) {
     const v = parseInt(e.target.value, 10);
-    if (Number.isFinite(v)) setQuantidade(Math.max(1, v));
+    if (Number.isFinite(v)) setQuantidade(pctToQ(v / 10));
   }
 
   return (
@@ -412,22 +450,31 @@ function ReguaFaixa() {
         {/* range nativo invisível por cima — arrastável */}
         <input
           type="range"
-          min={1}
-          max={max}
-          value={Math.min(q, max)}
+          min={0}
+          max={1000}
+          value={Math.round(pct * 10)}
           onChange={onSlider}
           aria-label="Ajustar quantidade pelo slider"
           className="absolute left-0 right-0 top-0 h-full w-full cursor-pointer appearance-none bg-transparent focus:outline-none [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:bg-[#FF6B35] [&::-moz-range-thumb]:shadow-[0_2px_8px_rgba(255,107,53,0.5)] [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-[#FF6B35] [&::-webkit-slider-thumb]:shadow-[0_2px_8px_rgba(255,107,53,0.5)]"
         />
       </div>
 
-      <div className="mt-1 flex justify-between text-[11px] text-[#9B9A95]">
+      <div className="relative mt-1 h-4 text-[11px] text-[#9B9A95]">
         {marcas.map((m, i) => (
           <button
             key={m.label}
             type="button"
             onClick={() => setQuantidade(m.q)}
-            className={`cursor-pointer transition hover:text-[#FF6B35] ${
+            style={{
+              left: `${posMarca(i)}%`,
+              transform:
+                i === 0
+                  ? "translateX(0)"
+                  : i === n - 1
+                  ? "translateX(-100%)"
+                  : "translateX(-50%)",
+            }}
+            className={`absolute top-0 cursor-pointer whitespace-nowrap transition hover:text-[#FF6B35] ${
               i === faixaAtivaIdx ? "font-semibold text-[#FF6B35]" : ""
             }`}
           >
