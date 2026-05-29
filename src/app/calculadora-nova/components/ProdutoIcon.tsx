@@ -32,7 +32,7 @@ export function ProdutoIcon({ produtoId, className }: Props) {
   }
 }
 
-const STROKE = "#9B9A95";
+const STROKE = "#001F3F";
 const FILL = "#FFFFFF";
 
 function CamisetaBasica({ className }: { className?: string }) {

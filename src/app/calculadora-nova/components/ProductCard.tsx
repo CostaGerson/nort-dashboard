@@ -19,7 +19,6 @@ export function ProductCard({ produto, variant, onSelect }: Props) {
   function handleClick() {
     if (timerRef.current) clearTimeout(timerRef.current);
     setPulsing(true);
-    // Espera o pulso completar antes de mudar de tela
     timerRef.current = setTimeout(() => {
       setPulsing(false);
       onSelect();
@@ -31,71 +30,99 @@ export function ProductCard({ produto, variant, onSelect }: Props) {
       type="button"
       onClick={handleClick}
       aria-label={`${produto.nome}, a partir de ${formatBRL(produto.precoBase)}`}
-      className={`group relative flex flex-col bg-white border border-black/[0.04] text-left transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B35] focus-visible:ring-offset-2 cursor-pointer ${
+      style={{ boxShadow: "var(--sh-md)" }}
+      className={`group relative flex w-full flex-col overflow-hidden text-left transition-all duration-300 hover:-translate-y-1 focus:outline-none focus-visible:ring-4 focus-visible:ring-[var(--o)]/40 active:translate-y-0 cursor-pointer ${
         isDestaque
-          ? "rounded-3xl p-6 h-[280px] shadow-[0_8px_32px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.10)]"
-          : "rounded-2xl p-4 h-[180px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_28px_rgba(0,0,0,0.08)]"
+          ? "rounded-[28px] p-5 md:p-6 h-[300px]"
+          : "rounded-3xl p-4 h-[212px]"
       } ${pulsing ? "animate-card-pulse" : ""}`}
     >
+      {/* superfície do card */}
+      <span
+        aria-hidden
+        className="absolute inset-0 -z-10 rounded-[inherit]"
+        style={{
+          background:
+            "linear-gradient(180deg, #FFFFFF 0%, #FCFAF6 100%)",
+          border: "1px solid var(--line)",
+        }}
+      />
+
       {/* Tag */}
       {produto.tag && (
         <span
-          className={`absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full text-[10px] font-semibold text-white uppercase tracking-wide ${
-            produto.tag.cor === "laranja"
-              ? "bg-[#FF6B35]"
-              : "bg-[#001F3F]"
-          }`}
+          className="absolute top-3.5 right-3.5 z-10 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+          style={{
+            background:
+              produto.tag.cor === "laranja" ? "var(--o)" : "var(--navy)",
+            boxShadow: "var(--sh-sm)",
+          }}
         >
           {produto.tag.texto}
         </span>
       )}
 
-      {/* Ilustração */}
+      {/* Palco da ilustração */}
       <div
-        className={`flex-1 flex items-center justify-center rounded-2xl bg-[#E8E6E1]/40 ${
+        className={`relative flex flex-1 items-center justify-center overflow-hidden rounded-2xl ${
           isDestaque ? "mb-4" : "mb-3"
         }`}
+        style={{
+          background:
+            "radial-gradient(120% 120% at 50% 18%, #FFFFFF 0%, #F1EBE1 100%)",
+        }}
       >
+        {/* halo quente atrás da peça */}
+        <span
+          aria-hidden
+          className="absolute rounded-full"
+          style={{
+            width: isDestaque ? 168 : 116,
+            height: isDestaque ? 168 : 116,
+            background:
+              "radial-gradient(circle, var(--o-100) 0%, rgba(255,231,220,0) 70%)",
+          }}
+        />
         <ProdutoIcon
           produtoId={produto.id}
-          className={isDestaque ? "h-32 w-32" : "h-20 w-20"}
+          className={`relative ${isDestaque ? "h-36 w-36" : "h-24 w-24"} transition-transform duration-300 group-hover:scale-[1.04]`}
         />
       </div>
 
       {/* Info */}
-      <div className="flex items-end justify-between gap-2">
-        <div className="flex-1 min-w-0">
+      <div className="flex items-end justify-between gap-3">
+        <div className="min-w-0 flex-1">
           <h3
-            className={`font-semibold text-[#1A1A1A] leading-tight ${
-              isDestaque ? "text-lg" : "text-sm"
+            className={`font-display font-bold leading-tight text-[var(--ink)] ${
+              isDestaque ? "text-[22px]" : "text-[15px]"
             }`}
           >
             {produto.nome}
           </h3>
           <p
-            className={`text-[#9B9A95] font-medium ${
-              isDestaque ? "text-sm mt-1" : "text-xs mt-0.5"
-            }`}
+            className={`mt-1 ${isDestaque ? "text-[13px]" : "text-[11px]"}`}
           >
-            a partir de {formatBRL(produto.precoBase)}
+            <span className="text-[var(--muted)]">a partir de </span>
+            <span className="font-display font-bold text-[var(--navy)]">
+              {formatBRL(produto.precoBase)}
+            </span>
           </p>
         </div>
 
-        {isDestaque && (
-          <span className="flex-shrink-0 w-9 h-9 rounded-full bg-[#FF6B35] text-white grid place-items-center transition-transform group-hover:translate-x-0.5">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
+        {isDestaque ? (
+          <span
+            className="flex flex-shrink-0 items-center gap-1.5 rounded-full px-4 py-2.5 text-[14px] font-semibold text-white transition-transform group-hover:translate-x-0.5"
+            style={{ background: "var(--o)", boxShadow: "var(--sh-sm)" }}
+          >
+            Escolher
+            <Seta />
+          </span>
+        ) : (
+          <span
+            className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full transition-transform group-hover:translate-x-0.5"
+            style={{ background: "var(--o-050)", color: "var(--o)" }}
+          >
+            <Seta />
           </span>
         )}
       </div>
@@ -103,9 +130,7 @@ export function ProductCard({ produto, variant, onSelect }: Props) {
       {/* Glow do pulso */}
       {pulsing && (
         <span
-          className={`absolute inset-0 pointer-events-none animate-pulse-glow ${
-            isDestaque ? "rounded-3xl" : "rounded-2xl"
-          }`}
+          className="pointer-events-none absolute inset-0 animate-pulse-glow rounded-[inherit]"
         />
       )}
 
@@ -127,19 +152,16 @@ export function ProductCard({ produto, variant, onSelect }: Props) {
         .animate-card-pulse {
           animation: card-pulse 550ms cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
         @keyframes pulse-glow {
           0% {
-            box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7),
-              0 0 0 0 rgba(255, 107, 53, 0);
+            box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7);
           }
           50% {
             box-shadow: 0 0 0 6px rgba(255, 107, 53, 0.9),
-              0 0 32px 8px rgba(255, 107, 53, 0.45);
+              0 0 36px 10px rgba(255, 107, 53, 0.45);
           }
           100% {
-            box-shadow: 0 0 0 0 rgba(255, 107, 53, 0),
-              0 0 0 0 rgba(255, 107, 53, 0);
+            box-shadow: 0 0 0 0 rgba(255, 107, 53, 0);
           }
         }
         .animate-pulse-glow {
@@ -147,5 +169,23 @@ export function ProductCard({ produto, variant, onSelect }: Props) {
         }
       `}</style>
     </button>
+  );
+}
+
+function Seta() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
   );
 }
