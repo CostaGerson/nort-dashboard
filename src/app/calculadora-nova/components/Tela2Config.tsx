@@ -16,9 +16,9 @@ export function Tela2Config() {
   }
 
   return (
-    <div className="nort-bg min-h-screen">
+    <div className="nort-bg flex min-h-screen flex-col">
       {/* Header */}
-      <header className="mx-auto grid h-[64px] max-w-[1400px] grid-cols-[auto_1fr_auto] items-center gap-4 px-4 md:px-8">
+      <header className="mx-auto grid h-[64px] w-full max-w-[1600px] shrink-0 grid-cols-[auto_1fr_auto] items-center gap-4 px-4 md:px-8">
         <button
           type="button"
           onClick={() => setStep(1)}
@@ -38,9 +38,9 @@ export function Tela2Config() {
         </span>
       </header>
 
-      {/* Conteúdo */}
-      <main className="mx-auto max-w-[1400px] px-4 pb-8 md:px-8">
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.35fr_1fr]">
+      {/* Conteúdo — ocupa toda a tela (totem fullscreen) */}
+      <main className="mx-auto flex w-full max-w-[1600px] flex-1 px-4 pb-6 md:px-8">
+        <div className="grid w-full flex-1 grid-cols-1 gap-4 lg:grid-cols-[1.35fr_1fr]">
           <PalcoPeca />
           <PainelConfig />
         </div>

@@ -28,7 +28,7 @@ export default function PainelConfig() {
   const podeBordar = produto.permiteBordado;
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex h-full flex-col gap-2.5">
       {mostrarCor && (
         <Bloco titulo="Cor">
           <SwatchRow />
@@ -140,8 +140,8 @@ function SwatchRow() {
       </div>
       {cores.includes("especial") && (
         <p className="mt-2.5 text-[11px] leading-snug text-[var(--ink-2)]">
-          Quer outra cor? A gente faz{" "}
-          <span className="font-semibold text-[var(--o)]">(+15%)</span>
+          Quer outra cor? A gente faz. Selecione{" "}
+          <span className="font-semibold text-[var(--o)]">cor especial</span>.
         </p>
       )}
     </div>
@@ -173,7 +173,7 @@ function SwatchCor({
           className="block h-10 w-10 rounded-full transition-transform duration-200"
           style={{
             background: ehEspecial
-              ? "conic-gradient(from 210deg, #FF6B35, #001F3F, #FF6B35)"
+              ? "conic-gradient(from 0deg, #FF5A5F, #FFB23E, #FFE14D, #4CD964, #34C7C7, #4A90E2, #8E6FE0, #E36AD4, #FF5A5F)"
               : cor.hex,
             boxShadow: ativo
               ? "0 0 0 2px var(--o), inset 0 0 0 1px rgba(0,0,0,0.08)"

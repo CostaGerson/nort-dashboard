@@ -20,9 +20,9 @@ import RadialTamanhos from "./RadialTamanhos";
 const STAGE_BG: Record<string, string> = {
   preto: "#E8C9A0",
   branco: "#14242E",
-  "azul-marinho": "#4A2E22",
+  "azul-marinho": "#B5743F",
   "azul-royal": "#2A2418",
-  "cinza-chumbo": "#1E3A44",
+  "cinza-chumbo": "#3E6E7B",
   "indigo-blue": "#3A2E18",
   especial: "#241B33",
 };
@@ -66,9 +66,28 @@ export default function PalcoPeca() {
 
   return (
     <div
-      className="relative flex min-h-[440px] flex-col overflow-hidden rounded-[22px]"
+      className="relative flex h-full min-h-[440px] flex-col overflow-hidden rounded-[22px]"
       style={{ background: bg, transition: "background 700ms cubic-bezier(0.4,0,0.2,1)" }}
     >
+      <style jsx>{`
+        @keyframes nortPlusPulse {
+          0%,
+          100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.5),
+              0 2px 10px rgba(255, 107, 53, 0.4);
+          }
+          50% {
+            transform: scale(1.18);
+            box-shadow: 0 0 0 11px rgba(255, 107, 53, 0),
+              0 2px 14px rgba(255, 107, 53, 0.55);
+          }
+        }
+        .nort-plus-pulse {
+          animation: nortPlusPulse 1.6s ease-in-out infinite;
+          background: rgba(255, 107, 53, 0.9) !important;
+        }
+      `}</style>
       {/* holofote */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -185,6 +204,11 @@ function Vista({
 
             const estampa = getEstampa(p.local, p.subLocal);
             const ocupado = !!estampa;
+            const devePulsar =
+              !ocupado &&
+              p.local === "frente" &&
+              p.subLocal === "esquerdo" &&
+              state.estampas.length === 0;
 
             return (
               <button
@@ -223,11 +247,12 @@ function Vista({
                   </span>
                 ) : (
                   <span
-                    className="grid h-7 w-7 place-items-center rounded-full text-[16px] font-bold leading-none text-white"
+                    className={`grid h-7 w-7 place-items-center rounded-full text-[16px] font-bold leading-none text-white ${
+                      devePulsar ? "nort-plus-pulse" : ""
+                    }`}
                     style={{
-                      background: "rgba(255,107,53,0.92)",
-                      boxShadow:
-                        "0 0 0 4px rgba(255,107,53,0.25), 0 2px 10px rgba(255,107,53,0.45)",
+                      background: "rgba(255,107,53,0.5)",
+                      boxShadow: "0 0 0 4px rgba(255,107,53,0.14)",
                     }}
                   >
                     +
