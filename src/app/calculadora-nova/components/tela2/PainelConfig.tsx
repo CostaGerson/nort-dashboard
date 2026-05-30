@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useWizard } from "@/lib/calculadora-nova/wizard-context";
 import {
   getProduto,
@@ -76,7 +77,7 @@ export default function PainelConfig() {
             value={state.bolsoCalca ? "sim" : "nao"}
             onChange={(v) => setBolsoCalca(v === "sim")}
             items={[
-              { value: "sim", label: "Sim", hint: "+R$20" },
+              { value: "sim", label: "Sim" },
               { value: "nao", label: "Não" },
             ]}
           />
@@ -255,6 +256,32 @@ function Segmented({
 
 function QuantidadeRegua() {
   const { state, setQuantidade } = useWizard();
+
+  // press-and-hold: 1 toque = 1 passo; segurando 1s começa a repetir
+  const qtyRef = useRef(state.quantidade);
+  qtyRef.current = state.quantidade;
+  const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const repeatTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  function passo(dir: number) {
+    const nv = Math.max(1, qtyRef.current + dir);
+    qtyRef.current = nv;
+    setQuantidade(nv);
+  }
+  function iniciarHold(dir: number) {
+    passo(dir);
+    holdTimer.current = setTimeout(() => {
+      repeatTimer.current = setInterval(() => passo(dir), 150);
+    }, 1000);
+  }
+  function pararHold() {
+    if (holdTimer.current) clearTimeout(holdTimer.current);
+    if (repeatTimer.current) clearInterval(repeatTimer.current);
+    holdTimer.current = null;
+    repeatTimer.current = null;
+  }
+  useEffect(() => () => pararHold(), []);
+
   if (!state.produtoId) return null;
   const produto = getProduto(state.produtoId);
   const ehSubli = produto.id === "dryfit-sublimacao-total";
@@ -307,9 +334,13 @@ function QuantidadeRegua() {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={() => setQuantidade(Math.max(1, q - 1))}
+            onPointerDown={() => iniciarHold(-1)}
+            onPointerUp={pararHold}
+            onPointerLeave={pararHold}
+            onPointerCancel={pararHold}
+            onContextMenu={(e) => e.preventDefault()}
             aria-label="Diminuir quantidade"
-            className="grid h-9 w-9 cursor-pointer place-items-center rounded-full text-[20px] leading-none text-[var(--ink)] transition active:scale-95"
+            className="grid h-9 w-9 cursor-pointer touch-none select-none place-items-center rounded-full text-[20px] leading-none text-[var(--ink)] transition active:scale-95"
             style={{ background: "#F2EEE7", border: "1px solid var(--line)" }}
           >
             −
@@ -319,9 +350,13 @@ function QuantidadeRegua() {
           </span>
           <button
             type="button"
-            onClick={() => setQuantidade(q + 1)}
+            onPointerDown={() => iniciarHold(1)}
+            onPointerUp={pararHold}
+            onPointerLeave={pararHold}
+            onPointerCancel={pararHold}
+            onContextMenu={(e) => e.preventDefault()}
             aria-label="Aumentar quantidade"
-            className="grid h-9 w-9 cursor-pointer place-items-center rounded-full text-[20px] leading-none text-[var(--ink)] transition active:scale-95"
+            className="grid h-9 w-9 cursor-pointer touch-none select-none place-items-center rounded-full text-[20px] leading-none text-[var(--ink)] transition active:scale-95"
             style={{ background: "#F2EEE7", border: "1px solid var(--line)" }}
           >
             +
@@ -419,9 +454,9 @@ function ResumoMeio() {
       )}
 
       <div className="mt-auto space-y-2 pt-4">
-        <Reassure texto="Arte conferida com você antes de produzir" />
-        <Reassure texto="Direto da fábrica Nort Sports" />
-        <Reassure texto="Tira dúvidas no WhatsApp na hora" />
+        <Reassure texto="Você envia sua logo depois" />
+        <Reassure texto="Direto da fábrica Meridian" />
+        <Reassure texto="Tire dúvidas após enviar o orçamento" />
       </div>
     </div>
   );

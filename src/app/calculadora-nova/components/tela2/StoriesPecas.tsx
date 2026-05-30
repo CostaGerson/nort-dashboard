@@ -1,29 +1,78 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useWizard } from "@/lib/calculadora-nova/wizard-context";
+import type { ProdutoId } from "@/lib/calculadora-nova/types";
 
-// Placeholder — troque depois pelas fotos reais.
-// Sugestão: coloque os arquivos em public/calculadora-nova/stories/
-// e use ["/calculadora-nova/stories/1.jpg", "/calculadora-nova/stories/2.jpg", ...]
-const STORIES = [
-  "https://picsum.photos/seed/nort-a/700/1100",
-  "https://picsum.photos/seed/nort-b/700/1100",
-  "https://picsum.photos/seed/nort-c/700/1100",
-  "https://picsum.photos/seed/nort-d/700/1100",
-];
+// Placeholder — troque depois pelas fotos reais de cada peça.
+// Sugestão: coloque em public/calculadora-nova/stories/<produto>/ e use
+// ["/calculadora-nova/stories/malha-pv/1.jpg", ...] em cada produto.
+const STORIES_POR_PRODUTO: Record<ProdutoId, string[]> = {
+  "malha-pv": [
+    "https://picsum.photos/seed/malhapv-1/700/1100",
+    "https://picsum.photos/seed/malhapv-2/700/1100",
+    "https://picsum.photos/seed/malhapv-3/700/1100",
+  ],
+  "dry-fit-elastano": [
+    "https://picsum.photos/seed/dryfit-1/700/1100",
+    "https://picsum.photos/seed/dryfit-2/700/1100",
+    "https://picsum.photos/seed/dryfit-3/700/1100",
+  ],
+  "dryfit-sublimacao-total": [
+    "https://picsum.photos/seed/subli-1/700/1100",
+    "https://picsum.photos/seed/subli-2/700/1100",
+    "https://picsum.photos/seed/subli-3/700/1100",
+  ],
+  "algodao-30-1": [
+    "https://picsum.photos/seed/algodao-1/700/1100",
+    "https://picsum.photos/seed/algodao-2/700/1100",
+    "https://picsum.photos/seed/algodao-3/700/1100",
+  ],
+  "egipcio-elastano": [
+    "https://picsum.photos/seed/egipcio-1/700/1100",
+    "https://picsum.photos/seed/egipcio-2/700/1100",
+    "https://picsum.photos/seed/egipcio-3/700/1100",
+  ],
+  "polo-piquet": [
+    "https://picsum.photos/seed/polo-1/700/1100",
+    "https://picsum.photos/seed/polo-2/700/1100",
+    "https://picsum.photos/seed/polo-3/700/1100",
+  ],
+  "calca-brim": [
+    "https://picsum.photos/seed/brim-1/700/1100",
+    "https://picsum.photos/seed/brim-2/700/1100",
+    "https://picsum.photos/seed/brim-3/700/1100",
+  ],
+  "calca-jeans": [
+    "https://picsum.photos/seed/jeans-1/700/1100",
+    "https://picsum.photos/seed/jeans-2/700/1100",
+    "https://picsum.photos/seed/jeans-3/700/1100",
+  ],
+};
 
 const DURACAO = 4500;
 
 export default function StoriesPecas() {
+  const { state } = useWizard();
+  const pid = state.produtoId;
+  const imgs =
+    (pid && STORIES_POR_PRODUTO[pid]) ??
+    STORIES_POR_PRODUTO["malha-pv"];
+
   const [i, setI] = useState(0);
 
+  // troca de produto reinicia o slide
   useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % STORIES.length), DURACAO);
-    return () => clearInterval(t);
-  }, []);
+    setI(0);
+  }, [pid]);
 
-  const prev = () => setI((v) => (v - 1 + STORIES.length) % STORIES.length);
-  const next = () => setI((v) => (v + 1) % STORIES.length);
+  useEffect(() => {
+    const t = setInterval(() => setI((v) => (v + 1) % imgs.length), DURACAO);
+    return () => clearInterval(t);
+  }, [pid, imgs.length]);
+
+  const prev = () => setI((v) => (v - 1 + imgs.length) % imgs.length);
+  const next = () => setI((v) => (v + 1) % imgs.length);
 
   return (
     <div className="relative hidden h-full min-h-[440px] overflow-hidden rounded-[22px] bg-[var(--navy)] lg:block">
@@ -41,11 +90,10 @@ export default function StoriesPecas() {
         }
       `}</style>
 
-      {/* imagens (crossfade) */}
-      {STORIES.map((src, idx) => (
+      {imgs.map((src, idx) => (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          key={idx}
+          key={`${pid}-${idx}`}
           src={src}
           alt=""
           aria-hidden="true"
@@ -54,7 +102,6 @@ export default function StoriesPecas() {
         />
       ))}
 
-      {/* scrims pra legibilidade */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -63,7 +110,6 @@ export default function StoriesPecas() {
         }}
       />
 
-      {/* zonas de toque */}
       <button
         type="button"
         onClick={prev}
@@ -77,15 +123,14 @@ export default function StoriesPecas() {
         className="absolute right-0 top-0 z-20 h-full w-1/3 cursor-pointer focus:outline-none"
       />
 
-      {/* barra de progresso (stories) */}
       <div className="absolute left-0 right-0 top-0 z-30 flex gap-1.5 p-3">
-        {STORIES.map((_, idx) => (
+        {imgs.map((_, idx) => (
           <div
             key={idx}
             className="h-1 flex-1 overflow-hidden rounded-full bg-white/30"
           >
             <div
-              key={idx === i ? `on-${i}` : `off-${idx}`}
+              key={idx === i ? `on-${pid}-${i}` : `off-${idx}`}
               className={idx === i ? "nort-story-fill" : ""}
               style={{
                 height: "100%",
@@ -97,7 +142,6 @@ export default function StoriesPecas() {
         ))}
       </div>
 
-      {/* legenda */}
       <div className="absolute bottom-0 left-0 right-0 z-10 p-4 text-white">
         <div className="text-[10px] font-bold uppercase tracking-wider text-white/70">
           Modelos reais

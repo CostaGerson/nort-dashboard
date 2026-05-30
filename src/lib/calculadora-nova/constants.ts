@@ -47,7 +47,7 @@ export const PRODUTOS: Produto[] = [
   },
   {
     id: "egipcio-elastano",
-    nome: "Camiseta Egípcio c/ Elastano",
+    nome: "Algodão Egípcio c/ Elastano",
     precoBase: 42.9,
     tipo: "camiseta",
     permiteManga: false,

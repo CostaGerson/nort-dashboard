@@ -34,15 +34,15 @@ const POS_FRENTE: Record<string, { x: number; y: number }> = {
   "frente:centro": { x: 50, y: 55 },
   "frente:direito": { x: 62, y: 40 },
   "frente:inferior": { x: 50, y: 76 },
-  "manga-esquerda:padrao": { x: 24, y: 42 },
-  "manga-direita:padrao": { x: 76, y: 42 },
+  "manga-esquerda:padrao": { x: 17, y: 42 },
+  "manga-direita:padrao": { x: 83, y: 42 },
 };
 const POS_COSTAS: Record<string, { x: number; y: number }> = {
   "costas:topo": { x: 50, y: 32 },
   "costas:centro": { x: 50, y: 55 },
   "costas:barra": { x: 50, y: 78 },
-  "manga-esquerda:padrao": { x: 24, y: 42 },
-  "manga-direita:padrao": { x: 76, y: 42 },
+  "manga-esquerda:padrao": { x: 17, y: 42 },
+  "manga-direita:padrao": { x: 83, y: 42 },
 };
 
 interface RadialState {
@@ -188,7 +188,7 @@ function Vista({
       <div
         ref={ref}
         className="relative aspect-square"
-        style={{ width: "clamp(240px, 20vw, 400px)" }}
+        style={{ width: "clamp(260px, 23vw, 470px)" }}
       >
         <SilhuetaPeca
           produtoId={state.produtoId}
