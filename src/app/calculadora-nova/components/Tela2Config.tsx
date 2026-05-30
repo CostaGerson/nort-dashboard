@@ -4,6 +4,7 @@ import { useWizard } from "@/lib/calculadora-nova/wizard-context";
 import { getProduto } from "@/lib/calculadora-nova/constants";
 import PalcoPeca from "./tela2/PalcoPeca";
 import PainelConfig from "./tela2/PainelConfig";
+import StoriesPecas from "./tela2/StoriesPecas";
 import Toast from "./tela2/Toast";
 
 export function Tela2Config() {
@@ -18,7 +19,7 @@ export function Tela2Config() {
   return (
     <div className="nort-bg flex min-h-screen flex-col">
       {/* Header */}
-      <header className="mx-auto grid h-[64px] w-full max-w-[1600px] shrink-0 grid-cols-[auto_1fr_auto] items-center gap-4 px-4 md:px-8">
+      <header className="grid h-[64px] w-full shrink-0 grid-cols-[auto_1fr_auto] items-center gap-4 px-5 md:px-7">
         <button
           type="button"
           onClick={() => setStep(1)}
@@ -39,10 +40,11 @@ export function Tela2Config() {
       </header>
 
       {/* Conteúdo — ocupa toda a tela (totem fullscreen) */}
-      <main className="mx-auto flex w-full max-w-[1600px] flex-1 px-4 pb-6 md:px-8">
-        <div className="grid w-full flex-1 grid-cols-1 gap-4 lg:grid-cols-[1.35fr_1fr]">
+      <main className="flex w-full flex-1 px-5 pb-5 md:px-7">
+        <div className="grid w-full flex-1 grid-cols-1 gap-4 lg:grid-cols-[1.35fr_1fr_0.62fr]">
           <PalcoPeca />
           <PainelConfig />
+          <StoriesPecas />
         </div>
       </main>
 

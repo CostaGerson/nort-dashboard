@@ -438,11 +438,12 @@ function PrecoBloco() {
       }}
     >
       <div>
-        <div className="text-[11px] text-white/85">
-          por peça {formatBRL(resultado.precoPeca)}
+        <div className="text-[11px] text-white/85">por peça</div>
+        <div className="font-display text-[26px] font-extrabold leading-none text-white">
+          {formatBRL(resultado.precoPeca)}
         </div>
-        <div className="font-display text-[24px] font-extrabold leading-tight text-white">
-          {formatBRL(resultado.total)}
+        <div className="mt-1 text-[12px] text-white/85">
+          total {formatBRL(resultado.total)}
         </div>
       </div>
       <button
