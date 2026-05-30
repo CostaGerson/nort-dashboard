@@ -29,6 +29,39 @@ export default function PainelConfig() {
 
   return (
     <div className="flex h-full flex-col gap-2.5">
+      <style jsx global>{`
+        @keyframes nortPop {
+          0% { transform: scale(0.86); }
+          55% { transform: scale(1.12); }
+          100% { transform: scale(1.05); }
+        }
+        @keyframes nortRipple {
+          0% { transform: scale(0.8); opacity: 0.5; }
+          100% { transform: scale(1.9); opacity: 0; }
+        }
+        @keyframes nortThumbGlow {
+          0%, 100% {
+            box-shadow: 0 2px 8px rgba(255,107,53,0.4), 0 0 0 0 rgba(255,107,53,0.35);
+          }
+          50% {
+            box-shadow: 0 2px 10px rgba(255,107,53,0.5), 0 0 0 7px rgba(255,107,53,0);
+          }
+        }
+        .nort-swatch-on {
+          animation: nortPop 0.42s cubic-bezier(0.34,1.56,0.64,1) forwards;
+        }
+        .nort-ripple {
+          position: absolute;
+          inset: 0;
+          border-radius: 9999px;
+          border: 2px solid var(--o);
+          pointer-events: none;
+          animation: nortRipple 0.5s ease-out forwards;
+        }
+        .nort-thumb {
+          animation: nortThumbGlow 2.2s ease-in-out infinite;
+        }
+      `}</style>
       {mostrarCor && (
         <Bloco titulo="Cor">
           <SwatchRow />
@@ -168,9 +201,10 @@ function SwatchCor({
       className="flex cursor-pointer flex-col items-center gap-1.5 focus:outline-none"
       style={{ width: 52 }}
     >
-      <span className="relative">
+      <span className="relative block h-10 w-10">
+        {ativo && <span className="nort-ripple" />}
         <span
-          className="block h-10 w-10 rounded-full transition-transform duration-200"
+          className={`block h-10 w-10 rounded-full ${ativo ? "nort-swatch-on" : ""}`}
           style={{
             background: ehEspecial
               ? "conic-gradient(from 0deg, #FF5A5F, #FFB23E, #FFE14D, #4CD964, #34C7C7, #4A90E2, #8E6FE0, #E36AD4, #FF5A5F)"
@@ -178,7 +212,7 @@ function SwatchCor({
             boxShadow: ativo
               ? "0 0 0 2px var(--o), inset 0 0 0 1px rgba(0,0,0,0.08)"
               : "inset 0 0 0 1.5px rgba(0,0,0,0.14)",
-            transform: ativo ? "scale(1.05)" : "scale(1)",
+            transition: "transform .2s",
           }}
         />
         {ativo && (
@@ -211,11 +245,24 @@ function Segmented({
   onChange: (v: string) => void;
   items: { value: string; label: string; hint?: string }[];
 }) {
+  const idx = Math.max(0, items.findIndex((it) => it.value === value));
   return (
-    <div
-      className="flex gap-1 rounded-xl p-1"
-      style={{ background: "#F2EEE7" }}
-    >
+    <div className="relative flex rounded-xl p-1" style={{ background: "#F2EEE7" }}>
+      {/* pílula que desliza */}
+      <span
+        aria-hidden
+        className="absolute rounded-lg"
+        style={{
+          top: 4,
+          bottom: 4,
+          left: 4,
+          width: `calc((100% - 8px) / ${items.length})`,
+          transform: `translateX(${idx * 100}%)`,
+          background: "var(--navy)",
+          boxShadow: "var(--sh-sm)",
+          transition: "transform 0.42s cubic-bezier(0.175,0.885,0.32,1.275)",
+        }}
+      />
       {items.map((it) => {
         const ativo = it.value === value;
         return (
@@ -224,12 +271,7 @@ function Segmented({
             type="button"
             onClick={() => onChange(it.value)}
             aria-pressed={ativo}
-            className="flex flex-1 cursor-pointer flex-col items-center justify-center rounded-lg px-2 py-2 text-center transition-all duration-200 active:scale-[0.97] focus:outline-none"
-            style={
-              ativo
-                ? { background: "var(--navy)", boxShadow: "var(--sh-sm)" }
-                : { background: "transparent" }
-            }
+            className="relative z-10 flex flex-1 cursor-pointer flex-col items-center justify-center rounded-lg px-2 py-2 text-center transition-colors duration-300 active:scale-[0.97] focus:outline-none"
           >
             <span
               className="text-[13px] font-semibold leading-tight"
@@ -367,12 +409,44 @@ function QuantidadeRegua() {
         </span>
       </div>
 
-      <div className="relative h-5">
-        <div className="absolute left-0 right-0 top-1/2 h-[4px] -translate-y-1/2 rounded-full bg-[var(--line)]" />
+      <div className="relative h-11 select-none">
+        {/* balãozinho do número */}
         <div
-          className="absolute left-0 top-1/2 h-[4px] -translate-y-1/2 rounded-full bg-[var(--o)] transition-all duration-150"
-          style={{ width: `${pct}%` }}
+          className="pointer-events-none absolute top-0 z-10 -translate-x-1/2"
+          style={{ left: `${pct}%`, transition: "left 200ms cubic-bezier(0.22,1,0.36,1)" }}
+        >
+          <span
+            className="font-display block rounded-md px-1.5 py-0.5 text-[11px] font-bold leading-none text-white"
+            style={{ background: "var(--navy)" }}
+          >
+            {q}
+          </span>
+        </div>
+        {/* trilho */}
+        <div
+          className="absolute left-0 right-0 top-[30px] h-[6px] -translate-y-1/2 rounded-full"
+          style={{ background: "var(--line)" }}
         />
+        {/* preenchimento */}
+        <div
+          className="absolute left-0 top-[30px] h-[6px] -translate-y-1/2 rounded-full"
+          style={{
+            width: `${pct}%`,
+            background: "var(--o)",
+            transition: "width 200ms cubic-bezier(0.22,1,0.36,1)",
+          }}
+        />
+        {/* pino custom (desliza suave) */}
+        <div
+          className="pointer-events-none absolute top-[30px] z-[1] -translate-x-1/2 -translate-y-1/2"
+          style={{ left: `${pct}%`, transition: "left 200ms cubic-bezier(0.22,1,0.36,1)" }}
+        >
+          <span
+            className="nort-thumb block h-6 w-6 rounded-full border-[3px] border-white"
+            style={{ background: "var(--o)" }}
+          />
+        </div>
+        {/* range nativo invisível (captura o arraste) */}
         <input
           type="range"
           min={0}
@@ -383,7 +457,7 @@ function QuantidadeRegua() {
             if (Number.isFinite(v)) setQuantidade(pctToQ(v / 10));
           }}
           aria-label="Ajustar quantidade"
-          className="absolute left-0 right-0 top-0 h-full w-full cursor-pointer appearance-none bg-transparent focus:outline-none [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:bg-[#FF6B35] [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-[#FF6B35]"
+          className="absolute left-0 top-[18px] h-6 w-full cursor-pointer appearance-none bg-transparent focus:outline-none [&::-moz-range-thumb]:h-6 [&::-moz-range-thumb]:w-6 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-transparent [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-transparent"
         />
       </div>
 
