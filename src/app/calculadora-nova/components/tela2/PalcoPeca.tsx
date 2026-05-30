@@ -187,7 +187,8 @@ function Vista({
     <div className="flex flex-col items-center">
       <div
         ref={ref}
-        className="relative aspect-square w-[210px] md:w-[250px]"
+        className="relative aspect-square"
+        style={{ width: "clamp(240px, 20vw, 400px)" }}
       >
         <SilhuetaPeca
           produtoId={state.produtoId}

@@ -24,7 +24,6 @@ export default function PainelConfig() {
   const mostrarCor = !ehSubli && !corTravada;
   const mostrarManga = produto.permiteManga;
   const mostrarTecnica = !ehSubli && !ehCalca;
-  const mostrarEstampas = !ehSubli && !ehCalca;
   const podeBordar = produto.permiteBordado;
 
   return (
@@ -88,7 +87,7 @@ export default function PainelConfig() {
         <QuantidadeRegua />
       </Bloco>
 
-      {mostrarEstampas && <EstampasMin />}
+      <ResumoMeio />
 
       <PrecoBloco />
     </div>
@@ -388,6 +387,60 @@ function QuantidadeRegua() {
   );
 }
 
+/* ---------- Resumo do meio (preenche o vão + reforço) ---------- */
+
+function ResumoMeio() {
+  const { state } = useWizard();
+  if (!state.produtoId) return null;
+  const produto = getProduto(state.produtoId);
+  const ehSubli = produto.id === "dryfit-sublimacao-total";
+  const ehCalca = produto.tipo === "calca";
+  const mostrarEstampas = !ehSubli && !ehCalca;
+
+  return (
+    <div
+      className="flex flex-1 flex-col rounded-2xl bg-white p-3"
+      style={{ border: "1px solid var(--line)", boxShadow: "var(--sh-sm)" }}
+    >
+      <p className="mb-2.5 text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
+        {mostrarEstampas ? "Suas estampas" : "Personalização"}
+      </p>
+
+      {mostrarEstampas ? (
+        <EstampasMin />
+      ) : (
+        <p className="text-[13px] text-[var(--ink-2)]">
+          {ehSubli
+            ? "Peça inteira personalizada — você envia a arte depois."
+            : state.bolsoCalca
+            ? "Bordado no bolso incluído."
+            : "Sem personalização no bolso."}
+        </p>
+      )}
+
+      <div className="mt-auto space-y-2 pt-4">
+        <Reassure texto="Arte conferida com você antes de produzir" />
+        <Reassure texto="Direto da fábrica Nort Sports" />
+        <Reassure texto="Tira dúvidas no WhatsApp na hora" />
+      </div>
+    </div>
+  );
+}
+
+function Reassure({ texto }: { texto: string }) {
+  return (
+    <div className="flex items-center gap-2 text-[12px] text-[var(--ink-2)]">
+      <span
+        className="grid h-4 w-4 flex-shrink-0 place-items-center rounded-full text-white"
+        style={{ background: "var(--o)" }}
+      >
+        <Check small />
+      </span>
+      {texto}
+    </div>
+  );
+}
+
 /* ---------- Estampas (minimalista) ---------- */
 
 function EstampasMin() {
@@ -431,7 +484,7 @@ function PrecoBloco() {
   const { resultado, setStep } = useWizard();
   return (
     <div
-      className="mt-auto flex items-center justify-between gap-3 rounded-2xl p-3.5"
+      className="flex flex-col gap-3 rounded-2xl p-4"
       style={{
         background: "linear-gradient(135deg, #FF6B35, #FF8A5B)",
         boxShadow: "0 8px 22px rgba(255,107,53,0.32)",
@@ -439,7 +492,7 @@ function PrecoBloco() {
     >
       <div>
         <div className="text-[11px] text-white/85">por peça</div>
-        <div className="font-display text-[26px] font-extrabold leading-none text-white">
+        <div className="font-display text-[28px] font-extrabold leading-none text-white">
           {formatBRL(resultado.precoPeca)}
         </div>
         <div className="mt-1 text-[12px] text-white/85">
@@ -449,10 +502,11 @@ function PrecoBloco() {
       <button
         type="button"
         onClick={() => setStep(3)}
-        className="flex cursor-pointer items-center gap-1.5 rounded-full bg-white px-4 py-2.5 text-[14px] font-bold text-[var(--navy)] transition active:scale-95 focus:outline-none"
+        className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full py-3.5 text-[16px] font-bold text-white transition active:scale-[0.98] focus:outline-none"
+        style={{ background: "var(--navy)", boxShadow: "0 6px 16px rgba(0,31,63,0.3)" }}
       >
-        Continuar
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        Continuar pro orçamento
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M5 12h14M12 5l7 7-7 7" />
         </svg>
       </button>
