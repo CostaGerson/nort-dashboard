@@ -1,18 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-
 const prisma = new PrismaClient();
-
 const users = [
   { username: 'GERSONCOSTA', password: '356241', name: 'Gerson Costa', role: 'admin' },
   { username: 'IGOR',        password: '3020',   name: 'Igor',         role: 'user'  },
   { username: 'TAVARES',     password: '3020',   name: 'Tavares',      role: 'user'  },
   { username: 'MAYCON',      password: '3020',   name: 'Maycon',       role: 'user'  },
+  { username: 'ADM',         password: 'adm001', name: 'ADM',          role: 'user'  },
 ];
-
 async function main() {
-  console.log('🌱 Seeding users...');
-
+  console.log('Seeding users...');
   for (const u of users) {
     const hash = await bcrypt.hash(u.password, 10);
     await prisma.user.upsert({
@@ -25,12 +22,10 @@ async function main() {
         role: u.role,
       },
     });
-    console.log(`  ✓ ${u.username}`);
+    console.log(`  ok ${u.username}`);
   }
-
-  console.log('✅ Done.');
+  console.log('Done.');
 }
-
 main()
   .catch((e) => {
     console.error(e);
