@@ -1,19 +1,35 @@
-// Configuração estática do Mockup Studio.
-// As cores aqui são as 5 atuais. Pra adicionar novas, basta entrar nesta lista
-// e colocar o JPG correspondente em /public/mockup/base/<peca>/<key>.jpg.
+// Configuração do Mockup Studio v2.
+// Cada peça agora usa SOMBRA + MÁSCARA (a cor entra por hard-light no canvas).
+// Uma peça serve pra infinitas cores — não há mais um JPG por cor.
 
 export type PecaKey = 'camiseta' | 'polo' | 'manga-longa';
 
 export interface PecaInfo {
   key: PecaKey;
   nome: string;
-  provisorio: boolean; // se true, mostra aviso "imagem provisória"
+  sombra: string;
+  mascara: string;
 }
 
 export const PECAS: PecaInfo[] = [
-  { key: 'camiseta', nome: 'Camiseta', provisorio: false },
-  { key: 'polo', nome: 'Polo', provisorio: true },
-  { key: 'manga-longa', nome: 'Manga Longa', provisorio: true },
+  {
+    key: 'camiseta',
+    nome: 'Camiseta',
+    sombra: '/mockup/pecas/camiseta/sombra.png',
+    mascara: '/mockup/pecas/camiseta/mascara.png',
+  },
+  {
+    key: 'polo',
+    nome: 'Polo',
+    sombra: '/mockup/pecas/polo/sombra.png',
+    mascara: '/mockup/pecas/polo/mascara.png',
+  },
+  {
+    key: 'manga-longa',
+    nome: 'Manga Longa',
+    sombra: '/mockup/pecas/manga-longa/sombra.png',
+    mascara: '/mockup/pecas/manga-longa/mascara.png',
+  },
 ];
 
 export interface CorInfo {
@@ -22,13 +38,16 @@ export interface CorInfo {
   nome: string;
 }
 
+// 5 cores fixas como atalho (além do picker livre)
 export const CORES: CorInfo[] = [
-  { key: 'branco', hex: '#fefefe', nome: 'Branco' },
-  { key: 'preto', hex: '#1c1c1e', nome: 'Preto' },
-  { key: 'cinza', hex: '#3a3a3a', nome: 'Cinza' },
-  { key: 'azul-royal', hex: '#2547d6', nome: 'Azul Royal' },
-  { key: 'azul-marinho', hex: '#0c2342', nome: 'Azul Marinho' },
+  { key: 'branco', hex: '#FEFEFE', nome: 'Branco' },
+  { key: 'preto', hex: '#1C1C1E', nome: 'Preto' },
+  { key: 'cinza-chumbo', hex: '#403F3D', nome: 'Cinza chumbo' },
+  { key: 'azul-royal', hex: '#2547D6', nome: 'Azul royal' },
+  { key: 'azul-marinho', hex: '#001F3F', nome: 'Azul marinho' },
 ];
+
+export const COR_PADRAO = '#2547D6';
 
 export type CotaKey = 'cota-peito' | 'cota-costas' | 'cota-manga';
 
@@ -38,6 +57,11 @@ export const COTAS: Record<CotaKey, string> = {
   'cota-manga': '/mockup/cotas/cota-manga.svg',
 };
 
-export function getShirtSrc(peca: PecaKey, cor: string): string {
-  return `/mockup/base/${peca}/${cor}.jpg`;
+// Overlays fixos do mockup
+export const BACKGROUND_SRC = '/mockup/overlay/background.png';
+export const MARCA_SRC = '/mockup/overlay/marca.png';
+export const MARCA_OPACIDADE = 0.1; // 10% — ponto definido no teste
+
+export function getPeca(key: PecaKey): PecaInfo {
+  return PECAS.find((p) => p.key === key) ?? PECAS[0];
 }

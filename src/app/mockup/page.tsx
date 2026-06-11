@@ -1,8 +1,7 @@
 import MockupClient from './MockupClient';
 
 export default function MockupPage() {
-  // Proteção de rota: middleware do NextAuth v5 cuida do redirect pra /login.
-  // Se o middleware ainda não protege essa rota, conferir matcher em src/middleware.ts.
+  // Proteção de rota via middleware NextAuth v5.
   return <MockupClient />;
 }
 
