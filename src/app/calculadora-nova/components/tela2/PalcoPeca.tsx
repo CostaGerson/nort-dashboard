@@ -312,12 +312,10 @@ function PecaImagemMockup({
           background: corHex,
           WebkitMaskImage: `url(${base}-mascara.png)`,
           maskImage: `url(${base}-mascara.png)`,
-          WebkitMaskSize: "contain",
-          maskSize: "contain",
+          WebkitMaskSize: "100% 100%",
+          maskSize: "100% 100%",
           WebkitMaskRepeat: "no-repeat",
           maskRepeat: "no-repeat",
-          WebkitMaskPosition: "center",
-          maskPosition: "center",
           transition: "background 500ms cubic-bezier(0.4,0,0.2,1)",
         }}
       />
@@ -327,8 +325,8 @@ function PecaImagemMockup({
         alt=""
         aria-hidden="true"
         draggable={false}
-        className="absolute inset-0 h-full w-full object-contain"
-        style={{ mixBlendMode: "hard-light" }}
+        className="absolute inset-0 block h-full w-full"
+        style={{ objectFit: "fill", mixBlendMode: "hard-light" }}
       />
     </div>
   );
