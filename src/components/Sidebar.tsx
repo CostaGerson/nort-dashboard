@@ -30,6 +30,14 @@ const Icon = {
       <path d="M3 9h18M8 21h8"></path>
     </svg>
   ),
+  traf: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 3v18h18"></path>
+      <rect x="7" y="11" width="3" height="6"></rect>
+      <rect x="13" y="7" width="3" height="10"></rect>
+      <rect x="18" y="13" width="2" height="4"></rect>
+    </svg>
+  ),
   prod: (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M14 3h7v7"></path>
@@ -37,19 +45,14 @@ const Icon = {
       <path d="M21 14v7H3V3h7"></path>
     </svg>
   ),
-  mkt: (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 11l18-8-5 18-4-8-9-2z"></path>
-    </svg>
-  ),
 };
 
 const items: Item[] = [
-  { href: '/dashboard',            label: 'Início',      icon: Icon.home  },
-  { href: '/dashboard/calculadora',label: 'Calculadora', icon: Icon.calc, disabled: true },
-  { href: '/dashboard/mockup',     label: 'Mockup',      icon: Icon.mockup, disabled: true },
-  { href: '#',                     label: 'Produção',    icon: Icon.prod,   disabled: true },
-  { href: '#',                     label: 'Marketing',   icon: Icon.mkt,    disabled: true },
+  { href: '/dashboard',          label: 'Início',      icon: Icon.home },
+  { href: '/dashboard/trafego',  label: 'Tráfego',     icon: Icon.traf },
+  { href: '/dashboard/calculadora', label: 'Calculadora', icon: Icon.calc, disabled: true },
+  { href: '/dashboard/mockup',   label: 'Mockup',      icon: Icon.mockup, disabled: true },
+  { href: '#',                   label: 'Produção',    icon: Icon.prod, disabled: true },
 ];
 
 export function Sidebar() {
@@ -63,8 +66,7 @@ export function Sidebar() {
         </div>
         {items.map((it) => {
           const active = path === it.href;
-          const baseCls =
-            'w-11 h-11 rounded-2xl flex items-center justify-center transition-all';
+          const baseCls = 'w-11 h-11 rounded-2xl flex items-center justify-center transition-all';
           const activeCls = active
             ? 'bg-ink text-cream dark:bg-cream dark:text-ink shadow-md'
             : 'hover:bg-black/5 dark:hover:bg-white/5';

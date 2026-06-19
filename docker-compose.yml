@@ -32,6 +32,7 @@ services:
       AUTH_TRUST_HOST: "true"
       NEXTAUTH_URL: ${NEXTAUTH_URL}
       NODE_ENV: production
+      WINDSOR_API_KEY: ${WINDSOR_API_KEY}
     ports:
       - "127.0.0.1:3120:3000"
     networks:

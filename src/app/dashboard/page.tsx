@@ -126,13 +126,16 @@ export default async function DashboardHome() {
           }
         />
         <Card
-          title="Marketing"
-          description="Reservado para o módulo futuro de Marketing."
-          status="em breve futuro"
-          disabled
+          title="Tráfego Pago"
+          description="Meta Ads + Google Ads em um painel: investimento, CTR, conversões e insights."
+          status="ativo"
+          href="/dashboard/trafego"
           icon={
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 11l18-8-5 18-4-8-9-2z"></path>
+              <path d="M3 3v18h18"></path>
+              <rect x="7" y="11" width="3" height="6"></rect>
+              <rect x="13" y="7" width="3" height="10"></rect>
+              <rect x="18" y="13" width="2" height="4"></rect>
             </svg>
           }
         />
