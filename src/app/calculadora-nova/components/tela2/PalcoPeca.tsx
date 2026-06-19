@@ -32,19 +32,19 @@ const STAGE_DEFAULT = "#1E2A38";
 
 // posições do "+" em % do quadro 4:5 da peça (calibradas nas imagens reais)
 const POS_FRENTE: Record<string, { x: number; y: number }> = {
-  "frente:esquerdo": { x: 37, y: 30 },
-  "frente:centro": { x: 50, y: 41 },
-  "frente:direito": { x: 63, y: 30 },
-  "frente:inferior": { x: 50, y: 58 },
-  "manga-esquerda:padrao": { x: 19, y: 29 },
-  "manga-direita:padrao": { x: 81, y: 29 },
+  "frente:esquerdo": { x: 36, y: 32 },
+  "frente:centro": { x: 50, y: 42 },
+  "frente:direito": { x: 64, y: 32 },
+  "frente:inferior": { x: 50, y: 60 },
+  "manga-esquerda:padrao": { x: 14, y: 30 },
+  "manga-direita:padrao": { x: 86, y: 30 },
 };
 const POS_COSTAS: Record<string, { x: number; y: number }> = {
   "costas:topo": { x: 50, y: 24 },
-  "costas:centro": { x: 50, y: 45 },
-  "costas:barra": { x: 50, y: 66 },
-  "manga-esquerda:padrao": { x: 18, y: 30 },
-  "manga-direita:padrao": { x: 82, y: 30 },
+  "costas:centro": { x: 50, y: 46 },
+  "costas:barra": { x: 50, y: 68 },
+  "manga-esquerda:padrao": { x: 14, y: 31 },
+  "manga-direita:padrao": { x: 86, y: 31 },
 };
 
 // produto -> peça do mockup (null = calça, usa silhueta SVG)
