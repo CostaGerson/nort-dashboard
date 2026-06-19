@@ -92,7 +92,7 @@ export default async function DashboardHome() {
           title="Calculadora"
           description="Orçamentos de uniformes com cálculo automático e envio pelo WhatsApp."
           status="ativo"
-          href="/calculadora"
+          href="/calculadora-nova"
           icon={
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="4" y="3" width="16" height="18" rx="3"></rect>
@@ -141,13 +141,26 @@ export default async function DashboardHome() {
         />
 
         <div className="glass rounded-card p-6 sm:col-span-2 lg:col-span-2 relative overflow-hidden">
-          <div className="flex items-start justify-between gap-6 flex-wrap">
-            <div>
-              <p className="text-xs uppercase tracking-wider text-muted mb-2 font-medium">Status</p>
-              <h3 className="text-2xl font-bold mb-1">Fase 2 — Mockup</h3>
-              <p className="text-sm text-muted max-w-md">
-                Mockup Studio integrado. Próxima fase: Produção.
+          <div className="absolute -bottom-16 -right-10 w-56 h-56 rounded-full bg-accent/10 blur-3xl pointer-events-none"></div>
+          <div className="relative flex items-start justify-between gap-6 flex-wrap">
+            <div className="max-w-md">
+              <span className="inline-block text-[10px] uppercase tracking-wider font-semibold px-3 py-1 rounded-full bg-accent/15 text-accent mb-3">
+                Novidade
+              </span>
+              <h3 className="text-2xl font-bold mb-1">Painel de Tráfego Pago no ar</h3>
+              <p className="text-sm text-muted">
+                Meta Ads e Google Ads reunidos num painel só. Acompanhe investimento,
+                CTR e conversões sem abrir cada plataforma.
               </p>
+              <a
+                href="/dashboard/trafego"
+                className="inline-flex items-center gap-2 mt-4 text-sm font-semibold px-5 py-2.5 rounded-full bg-ink text-cream dark:bg-cream dark:text-ink"
+              >
+                Abrir painel
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg>
+              </a>
             </div>
             <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
