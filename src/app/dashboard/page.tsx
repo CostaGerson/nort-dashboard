@@ -116,7 +116,8 @@ export default async function DashboardHome() {
           title="Produção"
           description="Acesso ao sistema de produção existente."
           status="externo"
-          disabled
+          href="https://producao.nortsports.com.br/"
+          external
           icon={
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14 3h7v7"></path>

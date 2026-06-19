@@ -48,11 +48,11 @@ const Icon = {
 };
 
 const items: Item[] = [
-  { href: '/dashboard',          label: 'Início',      icon: Icon.home },
-  { href: '/dashboard/trafego',  label: 'Tráfego',     icon: Icon.traf },
-  { href: '/dashboard/calculadora', label: 'Calculadora', icon: Icon.calc, disabled: true },
-  { href: '/dashboard/mockup',   label: 'Mockup',      icon: Icon.mockup, disabled: true },
-  { href: '#',                   label: 'Produção',    icon: Icon.prod, disabled: true },
+  { href: '/dashboard',         label: 'Início',     icon: Icon.home },
+  { href: '/dashboard/trafego', label: 'Tráfego',    icon: Icon.traf },
+  { href: '/calculadora-nova',  label: 'Calculadora', icon: Icon.calc },
+  { href: '/mockup',            label: 'Mockup',     icon: Icon.mockup },
+  { href: 'https://producao.nortsports.com.br/', label: 'Produção', icon: Icon.prod, external: true },
 ];
 
 export function Sidebar() {
@@ -79,6 +79,22 @@ export function Sidebar() {
               </div>
             );
           }
+
+          if (it.external) {
+            return (
+              <a
+                key={it.label}
+                href={it.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${baseCls} hover:bg-black/5 dark:hover:bg-white/5`}
+                title={it.label}
+              >
+                {it.icon}
+              </a>
+            );
+          }
+
           return (
             <Link key={it.label} href={it.href} className={`${baseCls} ${activeCls}`} title={it.label}>
               {it.icon}
