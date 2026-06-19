@@ -2,16 +2,18 @@
 
 import { useRef, useState } from "react";
 import { useWizard } from "@/lib/calculadora-nova/wizard-context";
-import { getProduto } from "@/lib/calculadora-nova/constants";
+import { getProduto, CORES, TAMANHOS_LABEL } from "@/lib/calculadora-nova/constants";
 import {
   POSICOES,
   posicaoDisponivelNaTecnica,
   labelPosicao,
 } from "@/lib/calculadora-nova/posicoes";
-import { TAMANHOS_LABEL } from "@/lib/calculadora-nova/constants";
 import type {
   LocalEstampa,
   SubLocalEstampa,
+  ProdutoId,
+  CorId,
+  MangaTipo,
 } from "@/lib/calculadora-nova/types";
 import SilhuetaPeca from "./SilhuetaPeca";
 import RadialTamanhos from "./RadialTamanhos";
@@ -28,22 +30,39 @@ const STAGE_BG: Record<string, string> = {
 };
 const STAGE_DEFAULT = "#1E2A38";
 
-// posições do "+" em % do container quadrado da peça
+// posições do "+" em % do quadro 4:5 da peça (calibradas nas imagens reais)
 const POS_FRENTE: Record<string, { x: number; y: number }> = {
-  "frente:esquerdo": { x: 38, y: 40 },
-  "frente:centro": { x: 50, y: 55 },
-  "frente:direito": { x: 62, y: 40 },
-  "frente:inferior": { x: 50, y: 76 },
-  "manga-esquerda:padrao": { x: 17, y: 42 },
-  "manga-direita:padrao": { x: 83, y: 42 },
+  "frente:esquerdo": { x: 37, y: 30 },
+  "frente:centro": { x: 50, y: 41 },
+  "frente:direito": { x: 63, y: 30 },
+  "frente:inferior": { x: 50, y: 58 },
+  "manga-esquerda:padrao": { x: 19, y: 29 },
+  "manga-direita:padrao": { x: 81, y: 29 },
 };
 const POS_COSTAS: Record<string, { x: number; y: number }> = {
-  "costas:topo": { x: 50, y: 32 },
-  "costas:centro": { x: 50, y: 55 },
-  "costas:barra": { x: 50, y: 78 },
-  "manga-esquerda:padrao": { x: 17, y: 42 },
-  "manga-direita:padrao": { x: 83, y: 42 },
+  "costas:topo": { x: 50, y: 24 },
+  "costas:centro": { x: 50, y: 45 },
+  "costas:barra": { x: 50, y: 66 },
+  "manga-esquerda:padrao": { x: 18, y: 30 },
+  "manga-direita:padrao": { x: 82, y: 30 },
 };
+
+// produto -> peça do mockup (null = calça, usa silhueta SVG)
+type PecaMockupKey = "camiseta" | "polo" | "manga-longa";
+function mockupPecaKey(
+  produtoId: ProdutoId,
+  manga: MangaTipo
+): PecaMockupKey | null {
+  if (produtoId === "calca-brim" || produtoId === "calca-jeans") return null;
+  if (produtoId === "polo-piquet") return "polo";
+  return manga === "longa" ? "manga-longa" : "camiseta";
+}
+
+function corHexDaPeca(corId: CorId | null): string {
+  if (!corId) return "#D4D2CC"; // sublimação (sem cor)
+  if (corId === "especial") return "#C9C7C2"; // cor a definir — neutro
+  return CORES[corId].hex;
+}
 
 interface RadialState {
   local: LocalEstampa;
@@ -61,8 +80,7 @@ export default function PalcoPeca() {
   const ehSubli = produto.id === "dryfit-sublimacao-total";
   const ehCalca = produto.tipo === "calca";
 
-  const bg =
-    (state.corId && STAGE_BG[state.corId]) ?? STAGE_DEFAULT;
+  const bg = (state.corId && STAGE_BG[state.corId]) ?? STAGE_DEFAULT;
 
   return (
     <div
@@ -117,8 +135,8 @@ export default function PalcoPeca() {
         </span>
       </div>
 
-      {/* peças */}
-      <div className="relative z-[1] flex flex-1 items-center justify-center gap-4 px-4 md:gap-8">
+      {/* peças — empilha no celular, lado a lado no desktop */}
+      <div className="relative z-[1] flex flex-1 flex-col items-center justify-center gap-4 px-4 py-2 md:flex-row md:gap-8">
         {ehCalca ? (
           <Vista vista="frente" comMais={false} onAbrirRadial={setRadial} />
         ) : (
@@ -176,6 +194,9 @@ function Vista({
   const ref = useRef<HTMLDivElement>(null);
   if (!state.produtoId) return null;
 
+  const pecaKey = mockupPecaKey(state.produtoId, state.manga);
+  const corHex = corHexDaPeca(state.corId);
+
   const mapaPos = vista === "frente" ? POS_FRENTE : POS_COSTAS;
   const posicoesDestaVista = POSICOES.filter((p) => {
     if (p.local === "frente") return vista === "frente";
@@ -184,17 +205,17 @@ function Vista({
   });
 
   return (
-    <div className="flex flex-col items-center">
-      <div
-        ref={ref}
-        className="relative aspect-square"
-        style={{ width: "clamp(260px, 23vw, 470px)" }}
-      >
-        <SilhuetaPeca
-          produtoId={state.produtoId}
-          corId={state.corId}
-          vista={vista}
-        />
+    <div className="flex w-full max-w-[300px] flex-col items-center md:max-w-[440px] md:flex-1">
+      <div ref={ref} className="relative aspect-[4/5] w-full">
+        {pecaKey ? (
+          <PecaImagemMockup pecaKey={pecaKey} vista={vista} corHex={corHex} />
+        ) : (
+          <SilhuetaPeca
+            produtoId={state.produtoId}
+            corId={state.corId}
+            vista={vista}
+          />
+        )}
 
         {comMais &&
           posicoesDestaVista.map((p) => {
@@ -233,7 +254,7 @@ function Vista({
                     });
                   }
                 }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full transition-transform duration-200 hover:scale-110 focus:outline-none"
+                className="absolute z-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full transition-transform duration-200 hover:scale-110 focus:outline-none"
                 style={{ left: `${coord.x}%`, top: `${coord.y}%` }}
               >
                 {ocupado ? (
@@ -266,6 +287,49 @@ function Vista({
       <span className="mt-1 rounded-md bg-black/20 px-2 py-0.5 text-[10px] uppercase tracking-wider text-white">
         {vista}
       </span>
+    </div>
+  );
+}
+
+/* ---------- Peça real (mesma lógica do mockup: cor + máscara + sombra hard-light) ---------- */
+
+function PecaImagemMockup({
+  pecaKey,
+  vista,
+  corHex,
+}: {
+  pecaKey: PecaMockupKey;
+  vista: "frente" | "costas";
+  corHex: string;
+}) {
+  const base = `/calculadora-nova/pecas/${pecaKey}/${vista}`;
+  return (
+    <div className="absolute inset-0" style={{ isolation: "isolate" }}>
+      {/* camada de cor recortada pela máscara */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: corHex,
+          WebkitMaskImage: `url(${base}-mascara.png)`,
+          maskImage: `url(${base}-mascara.png)`,
+          WebkitMaskSize: "contain",
+          maskSize: "contain",
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskPosition: "center",
+          maskPosition: "center",
+          transition: "background 500ms cubic-bezier(0.4,0,0.2,1)",
+        }}
+      />
+      {/* sombra/vincos em hard-light por cima */}
+      <img
+        src={`${base}-sombra.png`}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        className="absolute inset-0 h-full w-full object-contain"
+        style={{ mixBlendMode: "hard-light" }}
+      />
     </div>
   );
 }
