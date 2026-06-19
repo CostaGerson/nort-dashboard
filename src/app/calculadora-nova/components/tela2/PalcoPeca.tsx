@@ -65,13 +65,16 @@ function corHexDaPeca(corId: CorId | null): string {
   return CORES[corId].hex;
 }
 
-// estampa "aceso" vira um retângulo proporcional à medida (em cm) e vermelho.
+// estampa "aceso" vira um retângulo proporcional à medida (em cm) e verde.
+// regra: a maior medida fica na horizontal (largura), a menor na vertical.
 const PX_POR_CM = 4.5; // escala visual da estampa na peça
 function retanguloEstampa(tamanho: TamanhoEstampa) {
-  const [larguraCm, alturaCm] = tamanho.split("x").map(Number);
+  const [a, b] = tamanho.split("x").map(Number);
+  const maior = Math.max(a, b);
+  const menor = Math.min(a, b);
   return {
-    w: Math.round(larguraCm * PX_POR_CM),
-    h: Math.round(alturaCm * PX_POR_CM),
+    w: Math.round(maior * PX_POR_CM),
+    h: Math.round(menor * PX_POR_CM),
     label: TAMANHOS_LABEL[tamanho],
   };
 }
@@ -279,10 +282,10 @@ function Vista({
                       style={{
                         width: ret.w,
                         height: ret.h,
-                        background: "#E5352B",
+                        background: "#0da60d",
                         border: "1.5px solid rgba(255,255,255,0.92)",
                         borderRadius: 3,
-                        boxShadow: "0 2px 10px rgba(225,53,43,0.55)",
+                        boxShadow: "0 2px 10px rgba(13,166,13,0.5)",
                       }}
                     />
                     <span
