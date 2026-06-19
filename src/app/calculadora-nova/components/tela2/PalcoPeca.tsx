@@ -66,7 +66,7 @@ function corHexDaPeca(corId: CorId | null): string {
 }
 
 // estampa "aceso" vira um retângulo proporcional à medida (em cm) e vermelho.
-const PX_POR_CM = 2.6; // escala visual da estampa na peça
+const PX_POR_CM = 4.5; // escala visual da estampa na peça
 function retanguloEstampa(tamanho: TamanhoEstampa) {
   const [larguraCm, alturaCm] = tamanho.split("x").map(Number);
   return {
@@ -272,11 +272,10 @@ function Vista({
               >
                 {ocupado && ret ? (
                   <span
-                    className="grid place-items-center"
+                    className="relative grid place-items-center"
                     style={{ minWidth: 26, minHeight: 26 }}
                   >
                     <span
-                      className="grid place-items-center text-[9px] font-bold leading-none text-white"
                       style={{
                         width: ret.w,
                         height: ret.h,
@@ -285,8 +284,15 @@ function Vista({
                         borderRadius: 3,
                         boxShadow: "0 2px 10px rgba(225,53,43,0.55)",
                       }}
+                    />
+                    <span
+                      className="pointer-events-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap rounded px-1.5 py-0.5 text-[10px] font-bold leading-none text-white"
+                      style={{
+                        top: `calc(50% + ${ret.h / 2 + 4}px)`,
+                        background: "rgba(15,15,15,0.78)",
+                      }}
                     >
-                      {ret.w >= 30 && ret.h >= 16 ? ret.label : ""}
+                      {ret.label}
                     </span>
                   </span>
                 ) : (
