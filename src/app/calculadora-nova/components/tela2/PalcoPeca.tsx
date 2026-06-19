@@ -14,6 +14,7 @@ import type {
   ProdutoId,
   CorId,
   MangaTipo,
+  TamanhoEstampa,
 } from "@/lib/calculadora-nova/types";
 import SilhuetaPeca from "./SilhuetaPeca";
 import RadialTamanhos from "./RadialTamanhos";
@@ -36,15 +37,15 @@ const POS_FRENTE: Record<string, { x: number; y: number }> = {
   "frente:centro": { x: 50, y: 42 },
   "frente:direito": { x: 64, y: 32 },
   "frente:inferior": { x: 50, y: 60 },
-  "manga-esquerda:padrao": { x: 14, y: 30 },
-  "manga-direita:padrao": { x: 86, y: 30 },
+  "manga-esquerda:padrao": { x: 11, y: 30 },
+  "manga-direita:padrao": { x: 89, y: 30 },
 };
 const POS_COSTAS: Record<string, { x: number; y: number }> = {
   "costas:topo": { x: 50, y: 24 },
   "costas:centro": { x: 50, y: 46 },
   "costas:barra": { x: 50, y: 68 },
-  "manga-esquerda:padrao": { x: 14, y: 31 },
-  "manga-direita:padrao": { x: 86, y: 31 },
+  "manga-esquerda:padrao": { x: 11, y: 31 },
+  "manga-direita:padrao": { x: 89, y: 31 },
 };
 
 // produto -> peça do mockup (null = calça, usa silhueta SVG)
@@ -62,6 +63,17 @@ function corHexDaPeca(corId: CorId | null): string {
   if (!corId) return "#D4D2CC"; // sublimação (sem cor)
   if (corId === "especial") return "#C9C7C2"; // cor a definir — neutro
   return CORES[corId].hex;
+}
+
+// estampa "aceso" vira um retângulo proporcional à medida (em cm) e vermelho.
+const PX_POR_CM = 2.6; // escala visual da estampa na peça
+function retanguloEstampa(tamanho: TamanhoEstampa) {
+  const [larguraCm, alturaCm] = tamanho.split("x").map(Number);
+  return {
+    w: Math.round(larguraCm * PX_POR_CM),
+    h: Math.round(alturaCm * PX_POR_CM),
+    label: TAMANHOS_LABEL[tamanho],
+  };
 }
 
 interface RadialState {
@@ -226,6 +238,7 @@ function Vista({
 
             const estampa = getEstampa(p.local, p.subLocal);
             const ocupado = !!estampa;
+            const ret = estampa ? retanguloEstampa(estampa.tamanho) : null;
             const devePulsar =
               !ocupado &&
               p.local === "frente" &&
@@ -257,15 +270,24 @@ function Vista({
                 className="absolute z-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full transition-transform duration-200 hover:scale-110 focus:outline-none"
                 style={{ left: `${coord.x}%`, top: `${coord.y}%` }}
               >
-                {ocupado ? (
+                {ocupado && ret ? (
                   <span
-                    className="grid min-h-[30px] min-w-[30px] place-items-center rounded-full px-1.5 text-[10px] font-bold text-white"
-                    style={{
-                      background: "#FF6B35",
-                      boxShadow: "0 2px 10px rgba(255,107,53,0.55)",
-                    }}
+                    className="grid place-items-center"
+                    style={{ minWidth: 26, minHeight: 26 }}
                   >
-                    {TAMANHOS_LABEL[estampa!.tamanho]}
+                    <span
+                      className="grid place-items-center text-[9px] font-bold leading-none text-white"
+                      style={{
+                        width: ret.w,
+                        height: ret.h,
+                        background: "#E5352B",
+                        border: "1.5px solid rgba(255,255,255,0.92)",
+                        borderRadius: 3,
+                        boxShadow: "0 2px 10px rgba(225,53,43,0.55)",
+                      }}
+                    >
+                      {ret.w >= 30 && ret.h >= 16 ? ret.label : ""}
+                    </span>
                   </span>
                 ) : (
                   <span
